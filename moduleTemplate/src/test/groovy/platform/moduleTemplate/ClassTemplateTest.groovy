@@ -24,7 +24,7 @@ class ClassTemplateTest extends BaseSpecification {
 
     def 'Test Get Service Description with real service locator'() {
         setup:
-        ClassTemplate classTemplate = new ClassTemplate();
+        ClassTemplate classTemplate = getServiceLocator().getService(ClassTemplate.class);
 
         when:
         classTemplate.getConfigurationProperty(CommonConfigProperty.SERVICE_DESCRIPTION)
