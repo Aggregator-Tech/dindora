@@ -27,3 +27,7 @@ For example ./gradlew integrationTest -DbaseUrl=<LBR Url>
 To run integration tests for specific sub project under platform, say webTemplate
 $gradlew :webTemplate:integrationTest -DbaseUrl=http://localhost:9499
 
+# Creating a new module
+* Copy the moduleTemplate directory into a new directory at the same level, say newModule.
+* Add a new entry in the settings.gradle, eg include 'newModule'.
+* Refactor the template source and test code as per the requirement.
