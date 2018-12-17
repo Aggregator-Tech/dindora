@@ -31,3 +31,6 @@ $gradlew :webTemplate:integrationTest -DbaseUrl=http://localhost:9499
 * Copy the moduleTemplate directory into a new directory at the same level, say newModule.
 * Add a new entry in the settings.gradle, eg include 'newModule'.
 * Refactor the template source and test code as per the requirement.
+
+# Security module
+* Contains Security libraries , used for authentication, authorization and others
