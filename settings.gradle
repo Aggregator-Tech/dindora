@@ -1,6 +1,4 @@
 rootProject.name = 'dindora'
 include 'common'
-include 'web'
-include 'moduleTemplate'
-include 'webTemplate'
+include 'security'
 
