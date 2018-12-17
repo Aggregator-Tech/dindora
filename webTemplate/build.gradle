@@ -1,0 +1,13 @@
+ext {
+    servicePort='9499'
+}
+
+apply from: "$rootProject.projectDir/gradle/script/web.gradle"
+apply from: "$rootProject.projectDir/gradle/script/docker.gradle"
+
+dependencies {
+    implementation(
+            project(':web')
+    )
+
+}

@@ -1,0 +1,9 @@
+version: '2'
+services:
+  webtemplate:
+    image: ${namespace}/${repository}:${tag}
+    environment:
+      servicePort: ${servicePort}
+    ports:
+      - "${servicePort}:${servicePort}"
+
