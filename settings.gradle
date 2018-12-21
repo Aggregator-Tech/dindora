@@ -4,4 +4,4 @@ include 'web'
 include 'moduleTemplate'
 include 'webTemplate'
 include 'security'
-
+include 'topic'
