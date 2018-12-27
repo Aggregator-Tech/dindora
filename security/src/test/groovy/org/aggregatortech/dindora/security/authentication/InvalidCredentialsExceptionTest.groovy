@@ -1,7 +1,9 @@
 package org.aggregatortech.dindora.security.authentication
 
-import org.aggregatortech.dindora.exceptions.ErrorMessageService
-import platform.common.test.BaseSpecification
+import org.aggregatortech.dindora.common.ServiceLocatorHelper
+import org.aggregatortech.dindora.exceptions.InvalidCredentialsException
+import org.aggregatortech.dindora.exceptions.MessageService
+import org.aggregatortech.dindora.common.test.BaseSpecification
 
 
 class InvalidCredentialsExceptionTest extends BaseSpecification {
@@ -9,11 +11,12 @@ class InvalidCredentialsExceptionTest extends BaseSpecification {
     def 'Test Exception has error code and error message'() {
         setup :
 
-        String errorCode = ErrorMessageService.DINDORA_SECURITY_ERR_CODE_01;
+        String errorCode = MessageService.USERNAME_NULL_EMPTY;
         InvalidCredentialsException exception = new InvalidCredentialsException( errorCode);
+        MessageService msgService = ServiceLocatorHelper.getServiceLocator().getService(MessageService.class);
 
-        assert exception.getErrorMessage().indexOf (ErrorMessageService.DINDORA_SECURITY_ERR_CODE_01_MSG) != -1
-        assert exception.getErrorCode().indexOf (ErrorMessageService.DINDORA_SECURITY_ERR_CODE_01) != -1
+        assert exception.getErrorMessage().indexOf (msgService.getErrorMessage(errorCode)) != -1
+        assert exception.getErrorCode().indexOf (MessageService.USERNAME_NULL_EMPTY) != -1
 
 
     }
