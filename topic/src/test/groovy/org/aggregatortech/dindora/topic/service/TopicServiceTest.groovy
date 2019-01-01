@@ -3,7 +3,7 @@ package org.aggregatortech.dindora.topic.service
 import org.aggregatortech.dindora.exception.service.CommonErrorMessages
 import org.aggregatortech.dindora.topic.exception.TopicErrorMessages
 import org.aggregatortech.dindora.topic.object.Topic
-import org.aggregatortech.dindora.topic.persist.PersistenceService
+import org.aggregatortech.dindora.persistence.PersistenceService
 import platform.common.test.BaseSpecification
 import org.aggregatortech.dindora.exception.object.ProcessingException;
 
@@ -20,7 +20,7 @@ class TopicServiceTest extends BaseSpecification{
         TopicService topicService
         topicService = new TopicService(persistenceService)
 
-        when: "There are more that one topics in the repository"
+        when: "There are topics in the repository"
         List<Topic> topics = topicService.getAllTopics()
 
         then:
@@ -57,6 +57,29 @@ class TopicServiceTest extends BaseSpecification{
         ProcessingException ex= thrown()
         ex.errorMessage.contains(TopicErrorMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.message)
 
+    }
+
+    def "Test create Topic"() {
+        setup:
+        TopicService topicService
+        PersistenceService mockPersistenceService = Mock()
+        topicService = new TopicService(mockPersistenceService)
+
+        String topicId = "id-1"
+
+        Topic mockNewTopic = Mock()
+
+        Topic mockRetTopic = Mock()
+        mockRetTopic.id >> topicId
+        Topic retTopic;
+
+        when:
+        retTopic = topicService.createTopic(mockNewTopic)
+
+        then:
+        1 * mockPersistenceService.create(mockNewTopic) >> mockRetTopic
+        retTopic != null
+        retTopic.id != null
     }
 
 

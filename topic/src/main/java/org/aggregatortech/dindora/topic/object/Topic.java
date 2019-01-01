@@ -1,17 +1,10 @@
 package org.aggregatortech.dindora.topic.object;
 
-public class Topic {
-  private String id;
+import org.aggregatortech.dindora.common.object.Entity;
+
+public class Topic extends Entity {
   private String name;
   private String description;
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public String getName() {
     return name;

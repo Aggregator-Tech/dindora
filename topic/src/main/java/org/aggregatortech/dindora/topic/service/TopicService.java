@@ -2,16 +2,15 @@ package org.aggregatortech.dindora.topic.service;
 
 import org.aggregatortech.dindora.topic.exception.TopicErrorMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
-import org.aggregatortech.dindora.topic.persist.PersistenceService;
 import org.jvnet.hk2.annotations.Service;
 import org.aggregatortech.dindora.exception.object.ProcessingException;
-
+import org.aggregatortech.dindora.persistence.PersistenceService;
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
 public class TopicService {
-  PersistenceService persistenceService;
+  PersistenceService<Topic> persistenceService;
 
   @Inject
   public TopicService(PersistenceService persistenceService) {
@@ -27,5 +26,11 @@ public class TopicService {
   public List<Topic> getAllTopics() {
     checkPersistenceService();
     return persistenceService.search();
+  }
+
+  public Topic createTopic(Topic newTopic) {
+    Topic retTopic;
+    retTopic = persistenceService.create(newTopic);
+    return retTopic;
   }
 }
