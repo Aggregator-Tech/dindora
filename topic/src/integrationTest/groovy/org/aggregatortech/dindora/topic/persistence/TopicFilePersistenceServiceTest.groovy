@@ -1,6 +1,7 @@
 package org.aggregatortech.dindora.topic.persistence
 
 import org.aggregatortech.dindora.common.service.IdGenerationService
+import org.aggregatortech.dindora.exception.object.ProcessingException
 import org.aggregatortech.dindora.persistence.FilePersistenceLocationService
 import org.aggregatortech.dindora.topic.object.Topic
 import org.glassfish.hk2.api.ServiceLocator
@@ -65,5 +66,32 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         topics.size() == 2
         topics.containsAll(retTopic1, retTopic2)
 
+    }
+
+    def "Test Topic Persistence Failure"() {
+        setup:
+        ServiceLocator mockServiceLocator = Mock()
+        File newFile = temporaryFolder.newFile();
+        newFile.setReadOnly()
+        FilePersistenceLocationService filePersistenceLocationService = Mock()
+        mockServiceLocator.getService(FilePersistenceLocationService.class) >> filePersistenceLocationService
+        filePersistenceLocationService.getLocation() >> newFile.getAbsolutePath()
+        mockServiceLocator.getService(IdGenerationService.class) >> getServiceLocator().getService(IdGenerationService.class)
+        TopicFilePersistenceService topicFilePersistenceService = new TopicFilePersistenceService(mockServiceLocator)
+
+        when:
+        topicFilePersistenceService.create(new Topic())
+
+        then:
+        ProcessingException pe = thrown()
+        pe.errorMessage.contains("Communication failure with Persistence service.")
+
+        when:
+        newFile.delete()
+        topicFilePersistenceService.search()
+
+        then:
+        pe = thrown()
+        pe.errorMessage.contains("Communication failure with Persistence service.")
     }
 }

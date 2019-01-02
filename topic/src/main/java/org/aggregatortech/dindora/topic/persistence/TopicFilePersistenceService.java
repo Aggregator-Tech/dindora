@@ -3,6 +3,7 @@ package org.aggregatortech.dindora.topic.persistence;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.aggregatortech.dindora.exception.object.ProcessingException;
 import org.aggregatortech.dindora.persistence.FilePersistenceService;
+import org.aggregatortech.dindora.topic.message.bundle.TopicMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
 import org.glassfish.hk2.api.ServiceLocator;
 
@@ -25,8 +26,7 @@ public class TopicFilePersistenceService extends FilePersistenceService<Topic> {
           .constructCollectionType(List.class, Topic.class);
       topics = getMapper().readValue(getPersistenceFile(), javaType);
     } catch (IOException e) {
-      // TODO throw appropriate ProcessingException
-      throw new RuntimeException(e.getMessage());
+      throw new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_FAILED.toString());
     }
     return topics;
   }
@@ -36,8 +36,7 @@ public class TopicFilePersistenceService extends FilePersistenceService<Topic> {
     try {
       getMapper().writeValue(getPersistenceFile(), getEntities());
     } catch (IOException e) {
-      // TODO throw appropriate ProcessingException
-      throw new RuntimeException(e.getMessage());
+      throw new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_FAILED.toString());
     }
   }
 }

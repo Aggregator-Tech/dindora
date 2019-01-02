@@ -17,5 +17,10 @@ class TopicTest extends BaseSpecification {
         topic.id == "1"
         topic.name == "topicName"
         topic.description == "topicDescription"
+
+        and: "test equals and hashcode method"
+        topic.equals(topic)
+        !topic.equals(null)
+        topic.hashCode() == topic.hashCode()
     }
 }
