@@ -16,8 +16,9 @@ public class MessageService {
     this.messageBundleNameService = serviceLocator.getService(MessageBundleNameService.class);
   }
 
-  public String getMessage(String errCode) {
-    return serviceLocator.getService(MessageBundle.class, messageBundleNameService.getMessageBundleName(errCode))
-        .getMessage(errCode);
+  public String getMessage(String messageCode) {
+    return serviceLocator.getService(MessageBundle.class,
+                  messageBundleNameService.getMessageBundleName(messageCode))
+                  .getMessage(messageCode);
   }
 }

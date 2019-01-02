@@ -1,7 +1,7 @@
 package org.aggregatortech.dindora.security.authentication
 
 import org.aggregatortech.dindora.exceptions.ErrorMessageService
-import platform.common.test.BaseSpecification
+import org.aggregatortech.dindora.common.test.BaseSpecification
 
 
 class InvalidCredentialsExceptionTest extends BaseSpecification {

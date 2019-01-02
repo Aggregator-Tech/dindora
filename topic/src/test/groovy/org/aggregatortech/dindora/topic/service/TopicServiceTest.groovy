@@ -4,8 +4,8 @@ import org.aggregatortech.dindora.message.bundle.CommonMessages
 import org.aggregatortech.dindora.topic.message.bundle.TopicMessages
 import org.aggregatortech.dindora.topic.object.Topic
 import org.aggregatortech.dindora.persistence.PersistenceService
-import platform.common.test.BaseSpecification
-import org.aggregatortech.dindora.exception.object.ProcessingException;
+import org.aggregatortech.dindora.common.test.BaseSpecification
+import org.aggregatortech.dindora.exception.ProcessingException;
 
 import java.util.stream.Collectors
 import java.util.stream.Stream

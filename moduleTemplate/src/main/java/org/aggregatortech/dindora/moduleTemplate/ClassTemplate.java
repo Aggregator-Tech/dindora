@@ -2,8 +2,8 @@ package org.aggregatortech.dindora.moduleTemplate;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.jvnet.hk2.annotations.Service;
-import platform.common.ConfigProperty;
-import platform.common.io.system.SystemHelper;
+import org.aggregatortech.dindora.common.ConfigProperty;
+import org.aggregatortech.dindora.common.io.system.SystemHelper;
 
 import javax.inject.Inject;
 

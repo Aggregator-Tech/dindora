@@ -1,6 +1,6 @@
 package org.aggregatortech.dindora.exceptions
 
-import platform.common.test.BaseSpecification
+import org.aggregatortech.dindora.common.test.BaseSpecification
 
 
 class ErrorMessageServiceTest  extends BaseSpecification {

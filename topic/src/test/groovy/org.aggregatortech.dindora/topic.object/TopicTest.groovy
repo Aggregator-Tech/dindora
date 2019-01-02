@@ -1,7 +1,7 @@
 package platform.moduleTemplate
 
 import org.aggregatortech.dindora.topic.object.Topic
-import platform.common.test.BaseSpecification
+import org.aggregatortech.dindora.common.test.BaseSpecification
 
 class TopicTest extends BaseSpecification {
     def 'Test Create Topic Object'() {

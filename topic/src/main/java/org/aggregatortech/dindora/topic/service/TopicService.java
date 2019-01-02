@@ -3,7 +3,7 @@ package org.aggregatortech.dindora.topic.service;
 import org.aggregatortech.dindora.topic.message.bundle.TopicMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
 import org.jvnet.hk2.annotations.Service;
-import org.aggregatortech.dindora.exception.object.ProcessingException;
+import org.aggregatortech.dindora.exception.ProcessingException;
 import org.aggregatortech.dindora.persistence.PersistenceService;
 import javax.inject.Inject;
 import java.util.List;

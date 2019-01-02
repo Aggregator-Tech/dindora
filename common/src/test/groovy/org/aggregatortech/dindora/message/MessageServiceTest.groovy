@@ -1,7 +1,7 @@
 package org.aggregatortech.dindora.message
 
 import org.aggregatortech.dindora.message.bundle.CommonMessages
-import platform.common.test.BaseSpecification
+import org.aggregatortech.dindora.common.test.BaseSpecification
 
 class MessageServiceTest extends BaseSpecification {
     def "Test GetMessage"() {

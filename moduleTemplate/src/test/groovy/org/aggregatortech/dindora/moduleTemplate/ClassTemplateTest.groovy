@@ -1,9 +1,9 @@
 package org.aggregatortech.dindora.moduleTemplate
 
 import org.glassfish.hk2.api.ServiceLocator
-import platform.common.CommonConfigProperty
-import platform.common.io.system.SystemHelper
-import platform.common.test.BaseSpecification
+import org.aggregatortech.dindora.common.CommonConfigProperty
+import org.aggregatortech.dindora.common.io.system.SystemHelper
+import org.aggregatortech.dindora.common.test.BaseSpecification
 
 class ClassTemplateTest extends BaseSpecification {
     def 'Test Get Service Description with mock service locator'() {

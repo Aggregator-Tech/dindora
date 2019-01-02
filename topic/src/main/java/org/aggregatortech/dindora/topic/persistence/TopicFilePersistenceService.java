@@ -1,7 +1,7 @@
 package org.aggregatortech.dindora.topic.persistence;
 
 import com.fasterxml.jackson.databind.type.CollectionType;
-import org.aggregatortech.dindora.exception.object.ProcessingException;
+import org.aggregatortech.dindora.exception.ProcessingException;
 import org.aggregatortech.dindora.persistence.FilePersistenceService;
 import org.aggregatortech.dindora.topic.message.bundle.TopicMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
