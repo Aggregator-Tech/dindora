@@ -1,6 +1,6 @@
 package org.aggregatortech.dindora.topic.service;
 
-import org.aggregatortech.dindora.topic.exception.TopicErrorMessages;
+import org.aggregatortech.dindora.topic.message.bundle.TopicMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
 import org.jvnet.hk2.annotations.Service;
 import org.aggregatortech.dindora.exception.object.ProcessingException;
@@ -19,7 +19,7 @@ public class TopicService {
 
   private void checkPersistenceService() {
     if (persistenceService == null) {
-      throw new ProcessingException(TopicErrorMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.toString());
+      throw new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.toString());
     }
   }
 

@@ -1,4 +1,4 @@
-package platform.moduleTemplate;
+package org.aggregatortech.dindora.moduleTemplate;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.jvnet.hk2.annotations.Service;

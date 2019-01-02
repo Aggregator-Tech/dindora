@@ -1,11 +1,11 @@
-package org.aggregatortech.dindora.topic.exception;
+package org.aggregatortech.dindora.topic.message.bundle;
 
-public enum TopicErrorMessages {
+public enum TopicMessages {
   DINDORA_TOPIC_PERSISTENCE_MISSING("Persistence service is not available.");
 
   private final String message;
 
-  TopicErrorMessages(String message) {
+  TopicMessages(String message) {
     this.message = message;
   }
 

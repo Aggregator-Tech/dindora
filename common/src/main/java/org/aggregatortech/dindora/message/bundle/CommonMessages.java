@@ -1,11 +1,11 @@
-package org.aggregatortech.dindora.exception.service;
+package org.aggregatortech.dindora.message.bundle;
 
-public enum CommonErrorMessages {
+public enum CommonMessages {
   DINDORA_COMMON_PROCESSING_FAILED("Unable to process the request.");
 
   private final String message;
 
-  CommonErrorMessages(String message) {
+  CommonMessages(String message) {
     this.message = message;
   }
 

@@ -1,6 +1,5 @@
 package org.aggregatortech.dindora.topic.persistence
 
-import com.fasterxml.jackson.databind.ser.Serializers
 import org.aggregatortech.dindora.common.service.IdGenerationService
 import org.aggregatortech.dindora.persistence.FilePersistenceLocationService
 import org.aggregatortech.dindora.topic.object.Topic
@@ -23,29 +22,48 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         mockServiceLocator.getService(IdGenerationService.class) >> getServiceLocator().getService(IdGenerationService.class)
 
         TopicFilePersistenceService topicFilePersistenceService = new TopicFilePersistenceService(mockServiceLocator)
-        Topic newTopic = new Topic();
-        String topicName = "name1";
-        String topicDescription = "description1"
-        newTopic.setName(topicName)
-        newTopic.setDescription(topicDescription)
-        Topic retTopic
+        Topic newTopic1
+        newTopic1 = new Topic();
+        String topicName = "name";
+        String topicDescription = "description"
+        newTopic1.setName(topicName + "1")
+        newTopic1.setDescription(topicDescription + "1")
+        Topic retTopic1
 
-        when:
-        retTopic = topicFilePersistenceService.create(newTopic)
+        when: "A new topic is created"
+        retTopic1 = topicFilePersistenceService.create(newTopic1)
 
-        then:
-        retTopic != null
-        retTopic.id != null
+        then: "It is created successfully"
+        retTopic1 != null
+        retTopic1.id != null
 
-        when:
+        when: "All topics are queried"
         List<Topic> topics = topicFilePersistenceService.search()
 
-        then:
+        then: "Recently created topic is returned"
         topics != null
         topics.size() == 1
-        Topic topic1 = topics.get(0)
-        topic1 != null
-        topic1.name == topicName
-        topic1.description == topicDescription
+        topics.get(0) == retTopic1
+
+        when: "Another topic is created"
+        Topic newTopic2
+        newTopic2 = new Topic();
+        newTopic2.setName(topicName + "2")
+        newTopic2.setDescription(topicDescription + "2")
+        Topic retTopic2
+        retTopic2 = topicFilePersistenceService.create(newTopic2)
+
+        then: "It is created successfully"
+        retTopic2 != null
+        retTopic2.id != null
+
+        when: "All topics are queried"
+        topics = topicFilePersistenceService.search()
+
+        then: "Both the topics are returned"
+        topics != null
+        topics.size() == 2
+        topics.containsAll(retTopic1, retTopic2)
+
     }
 }

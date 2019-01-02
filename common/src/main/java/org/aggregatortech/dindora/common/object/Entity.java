@@ -1,7 +1,7 @@
 package org.aggregatortech.dindora.common.object;
 
 public class Entity {
-  private String id;
+  protected String id;
 
   public String getId() {
     return id;

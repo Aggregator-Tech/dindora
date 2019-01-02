@@ -1,4 +1,4 @@
-package platform.moduleTemplate
+package org.aggregatortech.dindora.moduleTemplate
 
 import spock.lang.Specification
 

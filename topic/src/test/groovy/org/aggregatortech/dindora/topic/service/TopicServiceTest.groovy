@@ -1,7 +1,7 @@
 package org.aggregatortech.dindora.topic.service
 
-import org.aggregatortech.dindora.exception.service.CommonErrorMessages
-import org.aggregatortech.dindora.topic.exception.TopicErrorMessages
+import org.aggregatortech.dindora.message.bundle.CommonMessages
+import org.aggregatortech.dindora.topic.message.bundle.TopicMessages
 import org.aggregatortech.dindora.topic.object.Topic
 import org.aggregatortech.dindora.persistence.PersistenceService
 import platform.common.test.BaseSpecification
@@ -40,9 +40,9 @@ class TopicServiceTest extends BaseSpecification{
         topics = topicService.getAllTopics()
 
         then:
-        persistenceService.search() >> {throw new ProcessingException(CommonErrorMessages.DINDORA_COMMON_PROCESSING_FAILED.toString())}
+        persistenceService.search() >> {throw new ProcessingException(CommonMessages.DINDORA_COMMON_PROCESSING_FAILED.toString())}
         ProcessingException re= thrown()
-        re.errorMessage.contains(CommonErrorMessages.DINDORA_COMMON_PROCESSING_FAILED.message)
+        re.errorMessage.contains(CommonMessages.DINDORA_COMMON_PROCESSING_FAILED.message)
 
     }
 
@@ -55,7 +55,7 @@ class TopicServiceTest extends BaseSpecification{
 
         then:
         ProcessingException ex= thrown()
-        ex.errorMessage.contains(TopicErrorMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.message)
+        ex.errorMessage.contains(TopicMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.message)
 
     }
 
