@@ -11,7 +11,8 @@ class PersistenceTypeServiceTest extends Specification {
         mockServiceLocator.getService(SystemHelper.class) >> mockSystemHelper
         mockSystemHelper.readConfigurationProperty(PersistenceConfigProperty.PERSISTENCE_TYPE) >> Optional.of(PersistenceTypeService.PERSISTENCE_TYPE_DYNAMO_DB)
         PersistenceTypeService persistenceTypeService =
-                new PersistenceTypeService(mockServiceLocator)
+                new PersistenceTypeService()
+        persistenceTypeService.setServiceLocator(mockServiceLocator)
         String persistenceType
         when:
         persistenceType = persistenceTypeService.getPersistenceType()
@@ -25,7 +26,8 @@ class PersistenceTypeServiceTest extends Specification {
         mockServiceLocator.getService(SystemHelper.class) >> mockSystemHelper
         mockSystemHelper.readConfigurationProperty(PersistenceConfigProperty.PERSISTENCE_TYPE) >> Optional.empty()
         PersistenceTypeService persistenceTypeService =
-                new PersistenceTypeService(mockServiceLocator)
+                new PersistenceTypeService()
+        persistenceTypeService.setServiceLocator(mockServiceLocator)
         String persistenceType
         when:
         persistenceType = persistenceTypeService.getPersistenceType()

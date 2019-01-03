@@ -13,11 +13,14 @@ public class PersistenceTypeService {
   public static final String PERSISTENCE_TYPE_FILE = "file";
   public static final String PERSISTENCE_TYPE_DYNAMO_DB = "dynamoDB";
 
+  @Inject
   ServiceLocator serviceLocator;
 
-  @Inject
-  public PersistenceTypeService(ServiceLocator serviceLocator) {
+  public void setServiceLocator(ServiceLocator serviceLocator) {
     this.serviceLocator = serviceLocator;
+  }
+
+  public PersistenceTypeService() {
   }
 
   public String getPersistenceType() {
