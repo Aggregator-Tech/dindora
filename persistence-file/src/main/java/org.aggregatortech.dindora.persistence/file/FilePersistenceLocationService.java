@@ -11,6 +11,10 @@ public class FilePersistenceLocationService {
   @Inject
   SystemHelper systemHelper;
 
+  public void setSystemHelper(SystemHelper systemHelper) {
+    this.systemHelper = systemHelper;
+  }
+
   public String getLocation() {
     return systemHelper.readMandatoryConfigurationProperty(FilePersistenceConfigProperty.FILE_PERSISTENCE_LOCATION);
   }
