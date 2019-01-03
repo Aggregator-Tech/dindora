@@ -1,18 +1,14 @@
 package org.aggregatortech.dindora.persistence
 
 import org.aggregatortech.dindora.common.io.system.SystemHelper
-import org.glassfish.hk2.api.ServiceLocator
 import spock.lang.Specification
 
 class PersistenceTypeServiceTest extends Specification {
     def "Get PersistenceType"() {
-        ServiceLocator mockServiceLocator = Mock()
         SystemHelper mockSystemHelper = Mock()
-        mockServiceLocator.getService(SystemHelper.class) >> mockSystemHelper
         mockSystemHelper.readConfigurationProperty(PersistenceConfigProperty.PERSISTENCE_TYPE) >> Optional.of(PersistenceTypeService.PERSISTENCE_TYPE_DYNAMO_DB)
-        PersistenceTypeService persistenceTypeService =
-                new PersistenceTypeService()
-        persistenceTypeService.setServiceLocator(mockServiceLocator)
+        PersistenceTypeService persistenceTypeService = new PersistenceTypeService()
+        persistenceTypeService.setSystemHelper(mockSystemHelper)
         String persistenceType
         when:
         persistenceType = persistenceTypeService.getPersistenceType()
@@ -21,13 +17,11 @@ class PersistenceTypeServiceTest extends Specification {
     }
 
     def "Get default PersistenceType"() {
-        ServiceLocator mockServiceLocator = Mock()
         SystemHelper mockSystemHelper = Mock()
-        mockServiceLocator.getService(SystemHelper.class) >> mockSystemHelper
         mockSystemHelper.readConfigurationProperty(PersistenceConfigProperty.PERSISTENCE_TYPE) >> Optional.empty()
         PersistenceTypeService persistenceTypeService =
                 new PersistenceTypeService()
-        persistenceTypeService.setServiceLocator(mockServiceLocator)
+        persistenceTypeService.setSystemHelper(mockSystemHelper)
         String persistenceType
         when:
         persistenceType = persistenceTypeService.getPersistenceType()

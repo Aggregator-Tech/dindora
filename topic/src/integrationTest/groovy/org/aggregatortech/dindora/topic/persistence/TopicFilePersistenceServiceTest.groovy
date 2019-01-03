@@ -1,6 +1,5 @@
 package org.aggregatortech.dindora.topic.persistence
 
-import org.aggregatortech.dindora.common.service.IdGenerationService
 import org.aggregatortech.dindora.common.test.BaseSpecification
 import org.aggregatortech.dindora.exception.ProcessingException
 import org.aggregatortech.dindora.persistence.file.FilePersistenceLocationService
@@ -17,12 +16,12 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         setup:
         ServiceLocator mockServiceLocator = Mock()
         File newFile = temporaryFolder.newFile();
-        FilePersistenceLocationService filePersistenceLocationService = Mock()
-        mockServiceLocator.getService(FilePersistenceLocationService.class) >> filePersistenceLocationService
-        filePersistenceLocationService.getLocation() >> newFile.getAbsolutePath()
-        mockServiceLocator.getService(IdGenerationService.class) >> getServiceLocator().getService(IdGenerationService.class)
+        FilePersistenceLocationService mockFilePersistenceLocationService = Mock()
+        mockServiceLocator.getService(FilePersistenceLocationService.class) >> mockFilePersistenceLocationService
+        mockFilePersistenceLocationService.getLocation() >> newFile.getAbsolutePath()
 
-        TopicFilePersistenceService topicFilePersistenceService = new TopicFilePersistenceService(mockServiceLocator)
+        TopicFilePersistenceService topicFilePersistenceService = getServiceLocator().getService(TopicFilePersistenceService.class)
+        topicFilePersistenceService.setFilePersistenceLocationService(mockFilePersistenceLocationService)
         Topic newTopic1
         newTopic1 = new Topic();
         String topicName = "name";
@@ -73,11 +72,11 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         ServiceLocator mockServiceLocator = Mock()
         File newFile = temporaryFolder.newFile();
         newFile.setReadOnly()
-        FilePersistenceLocationService filePersistenceLocationService = Mock()
-        mockServiceLocator.getService(FilePersistenceLocationService.class) >> filePersistenceLocationService
-        filePersistenceLocationService.getLocation() >> newFile.getAbsolutePath()
-        mockServiceLocator.getService(IdGenerationService.class) >> getServiceLocator().getService(IdGenerationService.class)
-        TopicFilePersistenceService topicFilePersistenceService = new TopicFilePersistenceService(mockServiceLocator)
+        FilePersistenceLocationService mockFilePersistenceLocationService = Mock()
+        mockServiceLocator.getService(FilePersistenceLocationService.class) >> mockFilePersistenceLocationService
+        mockFilePersistenceLocationService.getLocation() >> newFile.getAbsolutePath()
+        TopicFilePersistenceService topicFilePersistenceService = getServiceLocator().getService(TopicFilePersistenceService.class)
+        topicFilePersistenceService.setFilePersistenceLocationService(mockFilePersistenceLocationService)
 
         when:
         topicFilePersistenceService.create(new Topic())

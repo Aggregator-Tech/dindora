@@ -10,9 +10,9 @@ class ProcessingExceptionTest extends BaseSpecification{
                 new ProcessingException(CommonMessages.DINDORA_COMMON_PROCESSING_FAILED.toString())
 
         when:
-        String message = processingException.getErrorMessage()
+        String code = processingException.getErrorCode()
 
         then:
-        message == "DINDORA_COMMON_PROCESSING_FAILED  :  Unable to process the request."
+        code == "DINDORA_COMMON_PROCESSING_FAILED"
     }
 }

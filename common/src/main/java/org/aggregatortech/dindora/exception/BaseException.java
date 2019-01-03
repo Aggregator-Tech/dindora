@@ -1,8 +1,5 @@
 package org.aggregatortech.dindora.exception;
 
-import org.aggregatortech.dindora.message.MessageService;
-import org.aggregatortech.dindora.common.ServiceLocatorHelper;
-
 public abstract class BaseException extends RuntimeException {
 
   private String errorCode;
@@ -11,9 +8,6 @@ public abstract class BaseException extends RuntimeException {
   public BaseException(String errorCode) {
     super(errorCode);
     this.errorCode = errorCode;
-    this.errorMessage = ServiceLocatorHelper.getServiceLocator()
-        .getService(MessageService.class)
-        .getMessage(errorCode);
   }
 
   public String getErrorCode() {
@@ -32,5 +26,9 @@ public abstract class BaseException extends RuntimeException {
     }
 
     return this.errorCode + "  :  " + this.errorMessage;
+  }
+
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
   }
 }

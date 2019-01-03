@@ -1,9 +1,8 @@
 package org.aggregatortech.dindora.topic.service;
 
-import org.aggregatortech.dindora.persistence.PersistenceTypeService;
+import org.aggregatortech.dindora.common.service.BaseService;
 import org.aggregatortech.dindora.topic.message.bundle.TopicMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
-import org.glassfish.hk2.api.ServiceLocator;
 import org.jvnet.hk2.annotations.Service;
 import org.aggregatortech.dindora.exception.ProcessingException;
 import org.aggregatortech.dindora.persistence.PersistenceService;
@@ -11,14 +10,12 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Service
-public class TopicService {
+public class TopicService extends BaseService {
+  @Inject
   PersistenceService<Topic> persistenceService;
 
-  @Inject
-  public TopicService(ServiceLocator serviceLocator) {
-    String persistenceType = serviceLocator.getService(PersistenceTypeService.class)
-        .getPersistenceType();
-    this.persistenceService = serviceLocator.getService(PersistenceService.class, persistenceType);
+  public void setPersistenceService(PersistenceService<Topic> persistenceService) {
+    this.persistenceService = persistenceService;
   }
 
   public PersistenceService<Topic> getPersistenceService() {
@@ -27,7 +24,7 @@ public class TopicService {
 
   private void checkPersistenceService() {
     if (getPersistenceService() == null) {
-      throw new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.toString());
+      throw getExceptionService().buildException(new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.toString()));
     }
   }
 

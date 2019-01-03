@@ -14,18 +14,15 @@ public class PersistenceTypeService {
   public static final String PERSISTENCE_TYPE_DYNAMO_DB = "dynamoDB";
 
   @Inject
-  ServiceLocator serviceLocator;
+  SystemHelper systemHelper;
 
-  public void setServiceLocator(ServiceLocator serviceLocator) {
-    this.serviceLocator = serviceLocator;
-  }
-
-  public PersistenceTypeService() {
+  public void setSystemHelper(SystemHelper systemHelper) {
+    this.systemHelper = systemHelper;
   }
 
   public String getPersistenceType() {
-    Optional<String> persistenceType = serviceLocator.getService(SystemHelper.class)
-        .readConfigurationProperty(PersistenceConfigProperty.PERSISTENCE_TYPE);
+    Optional<String> persistenceType =
+        systemHelper.readConfigurationProperty(PersistenceConfigProperty.PERSISTENCE_TYPE);
     return persistenceType.orElse(PERSISTENCE_TYPE_FILE);
   }
 }
