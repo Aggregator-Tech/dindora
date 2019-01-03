@@ -1,4 +1,4 @@
-package org.aggregatortech.dindora.persistence;
+package org.aggregatortech.dindora.persistence.file;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.jvnet.hk2.annotations.Service;

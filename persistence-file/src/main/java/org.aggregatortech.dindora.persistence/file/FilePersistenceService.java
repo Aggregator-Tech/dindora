@@ -1,8 +1,9 @@
-package org.aggregatortech.dindora.persistence;
+package org.aggregatortech.dindora.persistence.file;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aggregatortech.dindora.common.object.Entity;
 import org.aggregatortech.dindora.common.service.IdGenerationService;
+import org.aggregatortech.dindora.persistence.PersistenceService;
 import org.glassfish.hk2.api.ServiceLocator;
 
 import java.io.File;
@@ -18,9 +19,6 @@ public abstract class FilePersistenceService<T extends Entity> implements Persis
   public FilePersistenceService(ServiceLocator serviceLocator) {
     this.serviceLocator = serviceLocator;
     this.mapper = new ObjectMapper();
-    String filePersistenceLocation = serviceLocator.getService(FilePersistenceLocationService.class)
-        .getLocation();
-    persistenceFile = new File(filePersistenceLocation);
     entities = new ArrayList<T>();
   }
 
@@ -28,24 +26,17 @@ public abstract class FilePersistenceService<T extends Entity> implements Persis
     return mapper;
   }
 
-  public void setMapper(ObjectMapper mapper) {
-    this.mapper = mapper;
-  }
-
   public File getPersistenceFile() {
+    if(persistenceFile == null) {
+      String filePersistenceLocation = serviceLocator.getService(FilePersistenceLocationService.class)
+          .getLocation();
+      persistenceFile = new File(filePersistenceLocation);
+    }
     return persistenceFile;
-  }
-
-  public void setPersistenceFile(File persistenceFile) {
-    this.persistenceFile = persistenceFile;
   }
 
   public List<T> getEntities() {
     return entities;
-  }
-
-  public void setEntities(List<T> entities) {
-    this.entities = entities;
   }
 
   public List<T> search() {

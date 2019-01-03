@@ -3,7 +3,7 @@ package org.aggregatortech.dindora.topic.persistence
 import org.aggregatortech.dindora.common.service.IdGenerationService
 import org.aggregatortech.dindora.common.test.BaseSpecification
 import org.aggregatortech.dindora.exception.ProcessingException
-import org.aggregatortech.dindora.persistence.FilePersistenceLocationService
+import org.aggregatortech.dindora.persistence.file.FilePersistenceLocationService
 import org.aggregatortech.dindora.topic.object.Topic
 import org.glassfish.hk2.api.ServiceLocator
 import org.junit.Rule

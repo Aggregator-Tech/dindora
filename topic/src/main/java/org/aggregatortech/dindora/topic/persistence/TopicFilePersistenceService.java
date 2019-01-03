@@ -2,15 +2,18 @@ package org.aggregatortech.dindora.topic.persistence;
 
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.aggregatortech.dindora.exception.ProcessingException;
-import org.aggregatortech.dindora.persistence.FilePersistenceService;
+import org.aggregatortech.dindora.persistence.PersistenceTypeService;
+import org.aggregatortech.dindora.persistence.file.FilePersistenceService;
 import org.aggregatortech.dindora.topic.message.bundle.TopicMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
 import org.glassfish.hk2.api.ServiceLocator;
+import org.jvnet.hk2.annotations.Service;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
 
+@Service(name = PersistenceTypeService.PERSISTENCE_TYPE_FILE)
 public class TopicFilePersistenceService extends FilePersistenceService<Topic> {
 
   @Inject
