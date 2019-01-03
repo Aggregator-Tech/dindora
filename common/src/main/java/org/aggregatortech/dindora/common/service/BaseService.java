@@ -9,7 +9,7 @@ public abstract class BaseService {
   ExceptionService exceptionService;
 
   public ExceptionService getExceptionService() {
-    return exceptionService != null ? exceptionService: new ExceptionService();
+    return exceptionService != null ? exceptionService : new ExceptionService();
   }
 
   public void setExceptionService(ExceptionService exceptionService) {

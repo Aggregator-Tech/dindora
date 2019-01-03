@@ -25,17 +25,17 @@ public class Topic extends Entity {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    Topic topic = (Topic) o;
-    return Objects.equals(id, topic.id) &&
-        Objects.equals(name, topic.name) &&
-        Objects.equals(description, topic.description);
+    Topic topic = (Topic) obj;
+    return Objects.equals(id, topic.id)
+        && Objects.equals(name, topic.name)
+        && Objects.equals(description, topic.description);
   }
 
   @Override

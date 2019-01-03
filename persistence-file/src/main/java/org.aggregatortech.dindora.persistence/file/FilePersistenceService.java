@@ -34,7 +34,7 @@ public abstract class FilePersistenceService<T extends Entity>
   }
 
   public File getPersistenceFile() {
-    if(persistenceFile == null) {
+    if (persistenceFile == null) {
       String filePersistenceLocation = filePersistenceLocationService.getLocation();
       persistenceFile = new File(filePersistenceLocation);
     }
@@ -52,11 +52,11 @@ public abstract class FilePersistenceService<T extends Entity>
 
   protected abstract List<T> readData();
 
-  public T create(T t) {
-    t.setId(idGenerationService.generate());
-    entities.add(t);
+  public T create(T entity) {
+    entity.setId(idGenerationService.generate());
+    entities.add(entity);
     writeData();
-    return t;
+    return entity;
   }
 
   protected abstract void writeData();
