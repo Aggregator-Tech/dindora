@@ -2,26 +2,33 @@ package org.aggregatortech.dindora.topic.object;
 
 import org.aggregatortech.dindora.common.object.Entity;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Topic extends Entity {
-  private String name;
-  private String description;
+
+  public static enum AttributeNames {
+    name, description;
+  }
+
+  public Topic() {
+    attributes = new HashMap<String,String>();
+  }
 
   public String getName() {
-    return name;
+    return attributes.get(AttributeNames.name.toString());
   }
 
   public void setName(String name) {
-    this.name = name;
+    attributes.put(AttributeNames.name.toString(), name);
   }
 
   public String getDescription() {
-    return description;
+    return attributes.get(AttributeNames.description.toString());
   }
 
   public void setDescription(String description) {
-    this.description = description;
+    attributes.put(AttributeNames.description.toString(), description);
   }
 
   @Override
@@ -33,13 +40,13 @@ public class Topic extends Entity {
       return false;
     }
     Topic topic = (Topic) obj;
-    return Objects.equals(id, topic.id)
-        && Objects.equals(name, topic.name)
-        && Objects.equals(description, topic.description);
+    return Objects.equals(getId(), topic.getId())
+        && Objects.equals(getName(), topic.getName())
+        && Objects.equals(getDescription(), topic.getDescription());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description);
+    return Objects.hash(getId(), getName(), getDescription());
   }
 }

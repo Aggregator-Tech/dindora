@@ -1,5 +1,6 @@
 dependencies {
     compile (
-            project(':persistence-file')
+            project(':persistence-file'),
+            project(':persistence-dynamodb')
     )
 }
