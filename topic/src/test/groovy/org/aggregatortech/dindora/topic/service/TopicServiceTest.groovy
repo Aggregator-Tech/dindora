@@ -6,8 +6,6 @@ import org.aggregatortech.dindora.topic.object.Topic
 import org.aggregatortech.dindora.persistence.PersistenceService
 import org.aggregatortech.dindora.common.test.BaseSpecification
 import org.aggregatortech.dindora.exception.ProcessingException
-import org.aggregatortech.dindora.topic.persistence.TopicFilePersistenceService
-
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
@@ -82,18 +80,5 @@ class TopicServiceTest extends BaseSpecification{
         1 * mockPersistenceService.create(mockNewTopic) >> mockRetTopic
         retTopic != null
         retTopic.id != null
-    }
-
-    def "Test Default Persistence Service is File"() {
-        setup:
-        TopicService topicService = getServiceLocator().getService(TopicService.class)
-
-        PersistenceService<Topic> persistenceService
-        when:
-        persistenceService = topicService.getPersistenceService()
-
-        then:
-        persistenceService instanceof TopicFilePersistenceService
-
     }
 }
