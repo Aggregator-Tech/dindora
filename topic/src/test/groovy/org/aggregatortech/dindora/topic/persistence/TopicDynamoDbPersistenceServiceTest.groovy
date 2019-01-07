@@ -1,14 +1,12 @@
 package org.aggregatortech.dindora.topic.persistence
 
+import com.google.common.base.Strings
 import org.aggregatortech.dindora.common.test.BaseSpecification
 import org.aggregatortech.dindora.topic.object.Topic
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
+import spock.lang.Requires
 
 class TopicDynamoDbPersistenceServiceTest extends BaseSpecification {
-    @Rule
-    TemporaryFolder temporaryFolder = new TemporaryFolder();
-
+    @Requires({TopicDynamoDbPersistenceServiceTest.shouldRunTest()})
     def "Test Topic Persistence"() {
         setup:
 
@@ -17,9 +15,8 @@ class TopicDynamoDbPersistenceServiceTest extends BaseSpecification {
         newTopic1 = new Topic();
         String topicName = "name";
         String topicDescription = "description"
-        newTopic1.setId("aaa-111")
-        newTopic1.setName(topicName + "1")
-        newTopic1.setDescription(topicDescription + "1")
+        newTopic1.setName(topicName + "2")
+        newTopic1.setDescription(topicDescription + "2")
         Topic retTopic1
 
         when: "A new topic is created"
@@ -38,5 +35,8 @@ class TopicDynamoDbPersistenceServiceTest extends BaseSpecification {
 
     }
 
-
+    static boolean shouldRunTest() {
+        boolean shouldRun = !Strings.isNullOrEmpty(System.getProperty("aws.accessKeyId")) && !Strings.isNullOrEmpty(System.getProperty("aws.secretKey"))
+        return shouldRun
+    }
 }
