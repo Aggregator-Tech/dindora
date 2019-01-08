@@ -3,6 +3,7 @@ package org.aggregatortech.dindora.topic.service;
 import org.aggregatortech.dindora.common.service.BaseService;
 import org.aggregatortech.dindora.topic.message.bundle.TopicMessages;
 import org.aggregatortech.dindora.topic.object.Topic;
+import org.aggregatortech.dindora.topic.persistence.TopicPersistenceService;
 import org.aggregatortech.dindora.topic.persistence.TopicPersistenceServiceResolver;
 import org.jvnet.hk2.annotations.Service;
 import org.aggregatortech.dindora.exception.ProcessingException;
@@ -14,13 +15,13 @@ import java.util.List;
 public class TopicService extends BaseService {
   @Inject
   TopicPersistenceServiceResolver topicPersistenceServiceResolver;
-  PersistenceService<Topic> persistenceService;
+  TopicPersistenceService persistenceService;
 
-  public void setPersistenceService(PersistenceService<Topic> persistenceService) {
+  public void setPersistenceService(TopicPersistenceService persistenceService) {
     this.persistenceService = persistenceService;
   }
 
-  public PersistenceService<Topic> getPersistenceService() {
+  public TopicPersistenceService getPersistenceService() {
     if (persistenceService == null && topicPersistenceServiceResolver != null) {
       persistenceService = topicPersistenceServiceResolver.resolve();
     }
@@ -35,7 +36,12 @@ public class TopicService extends BaseService {
 
   public List<Topic> getAllTopics() {
     checkPersistenceService();
-    return getPersistenceService().search();
+    return getPersistenceService().getAll();
+  }
+
+  public Topic getTopic(String id) {
+    checkPersistenceService();
+    return getPersistenceService().getTopic(id);
   }
 
   public Topic createTopic(Topic newTopic) {

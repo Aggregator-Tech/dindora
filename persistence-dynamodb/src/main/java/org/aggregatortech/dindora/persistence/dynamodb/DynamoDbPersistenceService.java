@@ -6,8 +6,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
 import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
 import org.aggregatortech.dindora.common.object.Entity;
 import org.aggregatortech.dindora.common.service.AwsRegionService;
@@ -52,9 +54,15 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
 
   public abstract String getTableName();
 
-  public List<T> search() {
+  public List<T> getAll() {
     ScanSpec scanSpec = new ScanSpec();
     ItemCollection<ScanOutcome> items = getTable().scan(scanSpec);
+    Iterator<Item> iter = items.iterator();
+    return mapItemsToEntities(iter);
+  }
+
+  public List<T> query(QuerySpec querySpec) {
+    ItemCollection<QueryOutcome> items = getTable().query(querySpec);
     Iterator<Item> iter = items.iterator();
     return mapItemsToEntities(iter);
   }

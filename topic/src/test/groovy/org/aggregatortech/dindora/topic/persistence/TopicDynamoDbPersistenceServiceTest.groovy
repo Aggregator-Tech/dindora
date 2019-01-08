@@ -27,7 +27,7 @@ class TopicDynamoDbPersistenceServiceTest extends BaseSpecification {
         retTopic1.id != null
 
         when: "All topics are queried"
-        List<Topic> topics = topicDynamoDBPersistenceService.search()
+        List<Topic> topics = topicDynamoDBPersistenceService.getAll()
 
         then: "Recently created topic is returned"
         topics != null

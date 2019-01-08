@@ -15,10 +15,10 @@ public class TopicPersistenceServiceResolver {
   @Inject
   ServiceLocator serviceLocator;
 
-  public PersistenceService<Topic> resolve() {
+  public TopicPersistenceService resolve() {
     String persistenceType = persistenceTypeService.getPersistenceType();
-    PersistenceService<Topic> persistenceService =
-        (PersistenceService<Topic>) serviceLocator.getService(PersistenceService.class, persistenceType);
+    TopicPersistenceService persistenceService =
+         serviceLocator.getService(TopicPersistenceService.class, persistenceType);
     return persistenceService;
   }
 }

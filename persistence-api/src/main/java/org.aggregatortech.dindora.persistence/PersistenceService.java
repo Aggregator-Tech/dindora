@@ -7,7 +7,9 @@ import java.util.List;
 
 @Contract
 public interface PersistenceService<T extends Entity> {
-  List<T> search();
 
   T create(T entity);
+
+  List<T> getAll();
+
 }

@@ -45,7 +45,7 @@ public abstract class FilePersistenceService<T extends Entity>
     return entities;
   }
 
-  public List<T> search() {
+  public List<T> getAll() {
     entities = readData();
     return entities;
   }

@@ -38,7 +38,7 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         retTopic1.id != null
 
         when: "All topics are queried"
-        List<Topic> topics = topicFilePersistenceService.search()
+        List<Topic> topics = topicFilePersistenceService.getAll()
 
         then: "Recently created topic is returned"
         topics != null
@@ -58,12 +58,20 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         retTopic2.id != null
 
         when: "All topics are queried"
-        topics = topicFilePersistenceService.search()
+        topics = topicFilePersistenceService.getAll()
 
         then: "Both the topics are returned"
         topics != null
         topics.size() == 2
         topics.containsAll(retTopic1, retTopic2)
+
+        when: "A particular topics are queried"
+        Topic queryTopic;
+        queryTopic = topicFilePersistenceService.getTopic(retTopic2.id)
+
+        then: "It is returned"
+        queryTopic != null
+        queryTopic == retTopic2
 
     }
 
@@ -87,7 +95,7 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
 
         when:
         newFile.delete()
-        topicFilePersistenceService.search()
+        topicFilePersistenceService.getAll()
 
         then:
         pe = thrown()

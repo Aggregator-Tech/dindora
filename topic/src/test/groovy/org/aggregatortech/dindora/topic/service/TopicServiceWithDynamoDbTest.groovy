@@ -13,7 +13,7 @@ class TopicServiceWithDynamoDbTest extends BaseSpecification {
         return (persistenceTypeService.getPersistenceType() == PERSISTENCE_TYPE_DYNAMO_DB);
     }
     @Requires({TopicServiceWithDynamoDbTest.shouldRunTest()})
-    def "Test createTopic"() {
+    def "Test Topic CRUD"() {
         TopicService topicService = getServiceLocator().getService(TopicService.class);
         expect:
         topicService.getPersistenceService() instanceof TopicDynamoDbPersistenceService
@@ -37,5 +37,16 @@ class TopicServiceWithDynamoDbTest extends BaseSpecification {
 
         then: "Recently created topic is returned"
         topics != null
-        topics.contains(retTopic1)   }
+        topics.contains(retTopic1)
+
+        when: "A particular topics are queried"
+        Topic queryTopic;
+        queryTopic = topicService.getTopic(retTopic1.id)
+
+        then: "It is returned"
+        queryTopic != null
+        queryTopic == retTopic1
+
+    }
+
 }
