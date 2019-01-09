@@ -7,7 +7,7 @@ import org.aggregatortech.dindora.topic.persistence.TopicPersistenceService;
 import org.aggregatortech.dindora.topic.persistence.TopicPersistenceServiceResolver;
 import org.jvnet.hk2.annotations.Service;
 import org.aggregatortech.dindora.exception.ProcessingException;
-import org.aggregatortech.dindora.persistence.PersistenceService;
+
 import javax.inject.Inject;
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class TopicService extends BaseService {
 
   public Topic getTopic(String id) {
     checkPersistenceService();
-    return getPersistenceService().getTopic(id);
+    return getPersistenceService().get(id);
   }
 
   public Topic createTopic(Topic newTopic) {

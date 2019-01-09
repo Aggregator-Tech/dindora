@@ -25,14 +25,4 @@ public class TopicDynamoDbPersistenceService extends DynamoDbPersistenceService<
     return new Topic();
   }
 
-  @Override
-  public Topic getTopic(String id) {
-    QuerySpec querySpec;
-    HashMap<String, Object> valueMap = new HashMap<String, Object>();
-    valueMap.put(":id", id);
-    querySpec = new QuerySpec()
-                    .withKeyConditionExpression("id = :id")
-                    .withValueMap(valueMap);
-    return query(querySpec).get(0);
-  }
 }

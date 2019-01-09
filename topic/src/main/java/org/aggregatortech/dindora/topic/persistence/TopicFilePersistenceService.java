@@ -42,9 +42,4 @@ public class TopicFilePersistenceService extends FilePersistenceService<Topic>
     return getExceptionService().buildException(new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_FAILED.toString()));
   }
 
-  @Override
-  public Topic getTopic(String id) {
-    Optional<Topic> topic = getEntities().stream().filter(entity -> entity.getId().equals(id)).findFirst();
-    return topic.get();
-  }
 }

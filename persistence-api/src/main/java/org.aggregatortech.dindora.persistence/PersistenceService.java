@@ -12,4 +12,5 @@ public interface PersistenceService<T extends Entity> {
 
   List<T> getAll();
 
+  T get(String id);
 }

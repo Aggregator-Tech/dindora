@@ -67,7 +67,7 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
 
         when: "A particular topics are queried"
         Topic queryTopic;
-        queryTopic = topicFilePersistenceService.getTopic(retTopic2.id)
+        queryTopic = topicFilePersistenceService.get(retTopic2.id)
 
         then: "It is returned"
         queryTopic != null

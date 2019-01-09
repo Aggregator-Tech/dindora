@@ -19,6 +19,7 @@ import org.aggregatortech.dindora.persistence.PersistenceService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -101,4 +102,14 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
     return item;
   }
 
+  @Override
+  public T get(String id) {
+    QuerySpec querySpec;
+    HashMap<String, Object> valueMap = new HashMap<String, Object>();
+    valueMap.put(":id", id);
+    querySpec = new QuerySpec()
+                    .withKeyConditionExpression("id = :id")
+                    .withValueMap(valueMap);
+    return query(querySpec).get(0);
+  }
 }

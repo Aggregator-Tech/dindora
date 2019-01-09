@@ -7,5 +7,4 @@ import org.jvnet.hk2.annotations.Contract;
 @Contract
 public interface TopicPersistenceService extends PersistenceService<Topic> {
 
-  public Topic getTopic(String id);
 }

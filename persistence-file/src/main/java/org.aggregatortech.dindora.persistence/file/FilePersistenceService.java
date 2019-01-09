@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class FilePersistenceService<T extends Entity>
     extends BaseService
@@ -65,4 +66,9 @@ public abstract class FilePersistenceService<T extends Entity>
     this.filePersistenceLocationService = filePersistenceLocationService;
   }
 
+  @Override
+  public T get(String id) {
+    Optional<T> topic = getEntities().stream().filter(entity -> entity.getId().equals(id)).findFirst();
+    return topic.get();
+  }
 }
