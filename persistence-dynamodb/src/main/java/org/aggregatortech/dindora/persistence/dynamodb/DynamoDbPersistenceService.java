@@ -15,7 +15,9 @@ import org.aggregatortech.dindora.common.object.Entity;
 import org.aggregatortech.dindora.common.service.AwsRegionService;
 import org.aggregatortech.dindora.common.service.BaseService;
 import org.aggregatortech.dindora.common.service.IdGenerationService;
+import org.aggregatortech.dindora.exception.ProcessingException;
 import org.aggregatortech.dindora.persistence.PersistenceService;
+import org.aggregatortech.dindora.persistence.message.bundle.PersistenceMessages;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
   private IdGenerationService idGenerationService;
   @Inject
   private AwsRegionService awsRegionService;
+  @Inject
+  private DynamoDbHelper dynamoDbHelper;
 
   protected DynamoDB dynamoDb;
 
@@ -42,6 +46,7 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
     if (dynamoDb == null) {
       synchronized (this) {
         if (dynamoDb == null) {
+          selfCheck();
           Regions region = Regions.fromName(awsRegionService.getRegion());
           AmazonDynamoDB client;
           client = AmazonDynamoDBClientBuilder.standard().withRegion(region).build();
@@ -111,5 +116,12 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
                     .withKeyConditionExpression("id = :id")
                     .withValueMap(valueMap);
     return query(querySpec).get(0);
+  }
+
+  @Override
+  public void selfCheck() {
+    if (!dynamoDbHelper.checkConfiguration()) {
+      throw new ProcessingException(PersistenceMessages.DINDORA_PERSISTENCE_NOT_CONFIGURED.toString());
+    }
   }
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 public class PersistenceTypeService {
 
   public static final String PERSISTENCE_TYPE_FILE = "file";
-  public static final String PERSISTENCE_TYPE_DYNAMO_DB = "dynamoDB";
+  public static final String PERSISTENCE_TYPE_DYNAMO_DB = "dynamodb";
 
   @Inject
   SystemHelper systemHelper;

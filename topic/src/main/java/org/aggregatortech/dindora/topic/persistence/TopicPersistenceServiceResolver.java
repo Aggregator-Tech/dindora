@@ -1,8 +1,6 @@
 package org.aggregatortech.dindora.topic.persistence;
 
-import org.aggregatortech.dindora.persistence.PersistenceService;
 import org.aggregatortech.dindora.persistence.PersistenceTypeService;
-import org.aggregatortech.dindora.topic.object.Topic;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.jvnet.hk2.annotations.Service;
 

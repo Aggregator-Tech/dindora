@@ -3,6 +3,7 @@ package org.aggregatortech.dindora.topic.persistence
 import org.aggregatortech.dindora.common.test.BaseSpecification
 import org.aggregatortech.dindora.exception.ProcessingException
 import org.aggregatortech.dindora.persistence.file.FilePersistenceLocationService
+import org.aggregatortech.dindora.persistence.message.bundle.PersistenceMessages
 import org.aggregatortech.dindora.topic.object.Topic
 import org.glassfish.hk2.api.ServiceLocator
 import org.junit.Rule
@@ -91,7 +92,7 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
 
         then:
         ProcessingException pe = thrown()
-        pe.errorMessage.contains("Communication failure with Persistence service.")
+        pe.errorCode == PersistenceMessages.DINDORA_PERSISTENCE_NOT_CONFIGURED.toString()
 
         when:
         newFile.delete()
@@ -99,6 +100,6 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
 
         then:
         pe = thrown()
-        pe.errorMessage.contains("Communication failure with Persistence service.")
+        pe.errorCode == PersistenceMessages.DINDORA_PERSISTENCE_NOT_CONFIGURED.toString()
     }
 }

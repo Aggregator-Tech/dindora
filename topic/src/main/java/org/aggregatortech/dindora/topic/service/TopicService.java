@@ -25,22 +25,17 @@ public class TopicService extends BaseService {
     if (persistenceService == null && topicPersistenceServiceResolver != null) {
       persistenceService = topicPersistenceServiceResolver.resolve();
     }
+    if (persistenceService == null) {
+      throw new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.toString());
+    }
     return persistenceService;
   }
 
-  private void checkPersistenceService() {
-    if (getPersistenceService() == null) {
-      throw getExceptionService().buildException(new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_MISSING.toString()));
-    }
-  }
-
   public List<Topic> getAllTopics() {
-    checkPersistenceService();
     return getPersistenceService().getAll();
   }
 
   public Topic getTopic(String id) {
-    checkPersistenceService();
     return getPersistenceService().get(id);
   }
 

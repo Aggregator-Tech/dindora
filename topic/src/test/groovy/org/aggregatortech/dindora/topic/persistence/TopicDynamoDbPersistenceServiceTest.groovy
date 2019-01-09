@@ -1,7 +1,7 @@
 package org.aggregatortech.dindora.topic.persistence
 
-import com.google.common.base.Strings
 import org.aggregatortech.dindora.common.test.BaseSpecification
+import org.aggregatortech.dindora.persistence.dynamodb.DynamoDbHelper
 import org.aggregatortech.dindora.topic.object.Topic
 import spock.lang.Requires
 
@@ -36,7 +36,7 @@ class TopicDynamoDbPersistenceServiceTest extends BaseSpecification {
     }
 
     static boolean shouldRunTest() {
-        boolean shouldRun = !Strings.isNullOrEmpty(System.getProperty("aws.accessKeyId")) && !Strings.isNullOrEmpty(System.getProperty("aws.secretKey"))
+        boolean shouldRun = getServiceLocator().getService(DynamoDbHelper.class).checkConfiguration()
         return shouldRun
     }
 }
