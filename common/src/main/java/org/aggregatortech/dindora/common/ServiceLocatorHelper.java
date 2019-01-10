@@ -2,7 +2,10 @@ package org.aggregatortech.dindora.common;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
+import org.aggregatortech.dindora.exception.ProcessingException;
+import org.aggregatortech.dindora.message.bundle.CommonMessages;
 import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.hk2.extras.ExtrasUtilities;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
 import org.jvnet.hk2.annotations.Service;
 
@@ -36,9 +39,11 @@ public class ServiceLocatorHelper {
           .filter(classObject -> classObject.isAnnotationPresent(Service.class))
           .toArray(Class[]::new);
       ServiceLocatorUtilities.addClasses(getServiceLocator(), serviceClasses);
+      ExtrasUtilities.enableDefaultInterceptorServiceImplementation(getServiceLocator());
 
     } catch (IOException e) {
       e.printStackTrace();
+      throw new ProcessingException(CommonMessages.DINDORA_COMMON_PROCESSING_FAILED.toString());
     }
   }
 

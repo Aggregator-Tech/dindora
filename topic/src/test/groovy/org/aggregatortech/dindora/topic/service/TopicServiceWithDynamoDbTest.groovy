@@ -39,7 +39,7 @@ class TopicServiceWithDynamoDbTest extends BaseSpecification {
         topics != null
         topics.contains(retTopic1)
 
-        when: "A particular topics are queried"
+        when: "A particular topics is queried"
         Topic queryTopic;
         queryTopic = topicService.getTopic(retTopic1.id)
 

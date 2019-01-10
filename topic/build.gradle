@@ -1,3 +1,6 @@
+apply plugin: 'application'
+mainClassName = "org.aggregatortech.dindora.topic.TopicApp"
+
 dependencies {
     compile (
             project(':persistence-file'),
