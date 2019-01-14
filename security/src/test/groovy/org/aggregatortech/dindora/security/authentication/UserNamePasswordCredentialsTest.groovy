@@ -1,9 +1,12 @@
 package org.aggregatortech.dindora.security.authentication
 
-import org.aggregatortech.dindora.exceptions.InvalidCredentialsException
-import org.aggregatortech.dindora.exceptions.MessageService
-import org.aggregatortech.dindora.common.test.BaseSpecification
+
+import org.aggregatortech.dindora.exception.InvalidCredentialsException
+
 import org.aggregatortech.dindora.security.authentication.token.UserNamePasswordCredentials
+import org.aggregatortech.dindora.common.test.BaseSpecification
+import org.aggregatortech.dindora.security.bundle.SecurityMessages
+
 
 class UserNamePasswordCredentialsTest extends BaseSpecification {
     def 'Test Validate User'() {
@@ -23,7 +26,7 @@ class UserNamePasswordCredentialsTest extends BaseSpecification {
             assert isValid == false
         }
         catch (InvalidCredentialsException ex) {
-            assert ex.getErrorCode() == MessageService.USERNAME_NULL_EMPTY
+            assert ex.getErrorCode() == SecurityMessages.DINDORA_SECURITY_USERNAME_NULL_EMPTY.toString()
 
         }
         username = ""
@@ -33,7 +36,7 @@ class UserNamePasswordCredentialsTest extends BaseSpecification {
             assert isValid == false
         }
         catch (InvalidCredentialsException ex) {
-            assert ex.getErrorCode() == MessageService.USERNAME_NULL_EMPTY
+            assert ex.getErrorCode() == SecurityMessages.DINDORA_SECURITY_USERNAME_NULL_EMPTY.toString()
 
         }
 
@@ -60,7 +63,7 @@ class UserNamePasswordCredentialsTest extends BaseSpecification {
             isValid = authCreds.validatePassword()
         }
         catch (InvalidCredentialsException ex) {
-            assert ex.getErrorCode() == MessageService.PASSWORD_NULL_EMPTY
+            assert ex.getErrorCode() == SecurityMessages.DINDORA_SECURITY_PASSWORD_NULL_EMPTY.toString()
 
         }
         password = ""
@@ -69,7 +72,7 @@ class UserNamePasswordCredentialsTest extends BaseSpecification {
             isValid = authCreds.validatePassword()
         }
         catch (InvalidCredentialsException ex) {
-            assert ex.getErrorCode() == MessageService.PASSWORD_NULL_EMPTY
+            assert ex.getErrorCode() == SecurityMessages.DINDORA_SECURITY_PASSWORD_NULL_EMPTY.toString()
 
         }
 

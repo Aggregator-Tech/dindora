@@ -1,36 +1,41 @@
 package org.aggregatortech.dindora.security.authentication.interceptor;
 
-import org.aggregatortech.dindora.common.ServiceLocatorHelper;
-import org.aggregatortech.dindora.exceptions.IDStoreNotConfiguredException;
-import org.aggregatortech.dindora.exceptions.InvalidCredentialsException;
-import org.aggregatortech.dindora.exceptions.MessageService;
+
+import org.aggregatortech.dindora.exception.InvalidCredentialsException;
 import org.aggregatortech.dindora.security.authentication.providers.IDProvider;
 import org.aggregatortech.dindora.security.authentication.token.AuthenticationCredentials;
+import org.aggregatortech.dindora.security.bundle.SecurityMessages;
 
-import java.io.IOException;
+import javax.inject.Inject;
+
 
 public class AuthenticationInterceptor {
 
 
-    private final IDProvider provider;
+    public IDProvider getIdp() {
+        return idp;
+    }
 
-    public AuthenticationInterceptor() throws IDStoreNotConfiguredException {
+    private  IDProvider idp = null;
 
-        provider = ServiceLocatorHelper.getServiceLocator().getService(IDProvider.class);
+    @Inject
+    public AuthenticationInterceptor(IDProvider idp)  {
+        if (idp == null ) {
+            throw new RuntimeException(SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString());
+        }
+        this.idp = idp;
 
-
-        provider.configure();
     }
 
 
-    public boolean intercept(MessageContext msgCtx) throws IDStoreNotConfiguredException, InvalidCredentialsException, IOException {
+    public boolean intercept(MessageContext msgCtx) throws  InvalidCredentialsException {
 
 
         AuthenticationCredentials authCreds = msgCtx.getAuthCreds();
         if (authCreds == null ) {
-            throw new InvalidCredentialsException(MessageService.USERNAME_NULL_EMPTY);
+            throw new InvalidCredentialsException(SecurityMessages.DINDORA_SECURITY_USERNAME_NULL_EMPTY.toString());
         }
-        return provider.authenticate(authCreds);
+        return idp.authenticate(authCreds);
 
 
 

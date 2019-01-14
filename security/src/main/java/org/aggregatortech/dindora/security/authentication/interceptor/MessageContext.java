@@ -3,6 +3,7 @@ package org.aggregatortech.dindora.security.authentication.interceptor;
 import org.aggregatortech.dindora.security.authentication.token.AuthenticationCredentials;
 
 public class MessageContext {
+    AuthenticationCredentials authCreds = null;
 
     public AuthenticationCredentials getAuthCreds() {
         return authCreds;
@@ -12,7 +13,7 @@ public class MessageContext {
         this.authCreds = authCreds;
     }
 
-    AuthenticationCredentials authCreds = null;
+
 
 
 }

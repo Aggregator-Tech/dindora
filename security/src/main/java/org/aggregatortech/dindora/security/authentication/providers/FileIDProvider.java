@@ -1,94 +1,98 @@
 package org.aggregatortech.dindora.security.authentication.providers;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aggregatortech.dindora.common.ServiceLocatorHelper;
 import org.aggregatortech.dindora.common.io.system.SystemHelper;
-import org.aggregatortech.dindora.exceptions.IDStoreNotConfiguredException;
-import org.aggregatortech.dindora.exceptions.InvalidCredentialsException;
-import org.aggregatortech.dindora.exceptions.MessageService;
+import org.aggregatortech.dindora.exception.IDStoreNotConfiguredException;
 import org.aggregatortech.dindora.security.authentication.token.AuthenticationCredentials;
 import org.aggregatortech.dindora.security.authentication.token.UserNamePasswordCredentials;
+import org.aggregatortech.dindora.security.bundle.SecurityMessages;
+import org.glassfish.hk2.api.ServiceLocator;
 import org.jvnet.hk2.annotations.Service;
 
 
+import javax.inject.Inject;
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
 public class FileIDProvider implements IDProvider {
 
 
-    public static final String IDSTORE_LOC = "idstore.loc";
-    //private JsonNode jsonNode;
-    private AuthenticationCredentials[] authCreds;
+    public static final String ID_STORE_LOC = "id-store.loc";
 
 
-    private File fileLoc = null;
+    private AuthenticationCredentials[] credentials;
 
-    @Override
-    public void configure() throws IDStoreNotConfiguredException {
+    @Inject
+    public FileIDProvider(ServiceLocator serviceLocator) throws IDStoreNotConfiguredException {
+        super();
+        configure(serviceLocator);
+    }
+
+
+
+
+
+    protected void configure(ServiceLocator serviceLocator) throws IDStoreNotConfiguredException {
         //File fileLoc = null;
-        SystemHelper systemHelper = ServiceLocatorHelper.getServiceLocator().getService(SystemHelper.class);
-        String propName = IDSTORE_LOC;
-        Optional<String> propertyValue = systemHelper.readConfigurationProperty(propName, null);
+
+        SystemHelper systemHelper = serviceLocator.getService(SystemHelper.class);
+        Optional<String> propertyValue = systemHelper.readConfigurationProperty(ID_STORE_LOC,null);
 
 
-        if (!propertyValue.isPresent() || propertyValue.get().trim().isEmpty()) {
-            throw new IDStoreNotConfiguredException(MessageService.IDSTORE_NOT_CONFIGURED);
+        if (propertyValue == null || !propertyValue.isPresent() || propertyValue.get().trim().isEmpty()) {
+            throw new IDStoreNotConfiguredException(SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString());
         }
 
 
-        JsonFactory factory = new JsonFactory();
+
         JsonNode jsonNode;
         try {
-            //JsonParser parser =  factory.createParser(fileLoc);
+
             File fileLoc = new File(propertyValue.get());
             ObjectMapper mapper = new ObjectMapper();
             jsonNode = mapper.readTree(fileLoc);
 
         } catch (Exception ex) {
 
-            throw new IDStoreNotConfiguredException(MessageService.IDSTORE_NOT_CONFIGURED, ex);
+            throw new IDStoreNotConfiguredException(SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString(), ex);
         }
 
 
         //parse file and see if it follows a particular format
 
         JsonNode jsonNodeUsers = jsonNode.get("users");
-        String str = null;
+
         if (!jsonNodeUsers.isArray()) {
 
-            throw new IDStoreNotConfiguredException(MessageService.IDSTORE_NOT_CONFIGURED);
+            throw new IDStoreNotConfiguredException(SecurityMessages.DINDORA_SECURITY_IDSTORE_FORMAT_NOT_VALID.toString());
         }
-
-
 
         ObjectMapper mapper = new ObjectMapper();
 
 
         try {
 
-           authCreds = mapper.readValue(jsonNodeUsers.toString(),
+           credentials = mapper.readValue(jsonNodeUsers.toString(),
                     UserNamePasswordCredentials[].class);
         }
         catch (Exception ex ){
-            throw new IDStoreNotConfiguredException(MessageService.IDSTORE_NOT_CONFIGURED,ex);
+            throw new IDStoreNotConfiguredException(SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString(),ex);
         }
 
 
 }
     @Override
-    public boolean authenticate(AuthenticationCredentials authCredsIn) throws InvalidCredentialsException, IOException {
+    public boolean authenticate(AuthenticationCredentials credentialsIn){
 
-        boolean isSuccess = false;
-        for (AuthenticationCredentials authCredsElement: authCreds
+
+
+        for (AuthenticationCredentials credentialsItem: credentials
              ) {
-               if ( authCredsElement.equals(authCredsIn) )
+               if ( credentialsItem.equals(credentialsIn) )
             {
-                isSuccess = true;
+               
                return true;
             }
             

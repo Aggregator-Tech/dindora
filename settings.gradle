@@ -4,4 +4,6 @@ include 'web'
 include 'moduleTemplate'
 include 'webTemplate'
 include 'security'
-
+include 'topic'
+include 'persistence-api'
+include 'persistence-file'

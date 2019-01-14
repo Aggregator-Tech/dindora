@@ -30,7 +30,7 @@ public class ServiceLocatorHelper {
 
       ImmutableSet<ClassPath.ClassInfo> allClasses =
           ClassPath.from(ClassLoader.getSystemClassLoader())
-              .getTopLevelClassesRecursive(Constants.PLATFORM_PACKAGE);
+              .getTopLevelClassesRecursive(Constants.BASE_PACKAGE);
       Class<?>[] serviceClasses = allClasses.stream()
           .map(ClassPath.ClassInfo::load)
           .filter(classObject -> classObject.isAnnotationPresent(Service.class))

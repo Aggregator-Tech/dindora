@@ -2,188 +2,223 @@ package org.aggregatortech.dindora.security.authentication.providers
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
-import org.aggregatortech.dindora.common.ServiceLocatorHelper
 import org.aggregatortech.dindora.common.io.system.SystemHelper
 import org.aggregatortech.dindora.common.test.BaseSpecification
-import org.aggregatortech.dindora.exceptions.IDStoreNotConfiguredException
-import org.aggregatortech.dindora.exceptions.MessageService
+import org.aggregatortech.dindora.exception.IDStoreNotConfiguredException
+
 import org.aggregatortech.dindora.security.authentication.token.AuthenticationCredentials
 import org.aggregatortech.dindora.security.authentication.token.UserNamePasswordCredentials
+import org.aggregatortech.dindora.security.bundle.SecurityMessages
+import org.glassfish.hk2.api.ServiceLocator
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 
 class FileIDProviderTest extends BaseSpecification {
 
+    @Rule
+
+    public TemporaryFolder folder= new TemporaryFolder();
 
     def "Test throws ID Store Not configured exception if configurations are not valid"() {
         setup:
+        ServiceLocator serviceLocator = Mock(ServiceLocator.class)
+        SystemHelper systemHelper = Mock(SystemHelper.class)
+        //IDProvider idp = null;
+
+        IDStoreNotConfiguredException idEx;
+        File f = folder.newFile("idstore");
 
 
-        when :
-          // idstore location is not set
-        IDProvider idp = new FileIDProvider();
-        then :
+        when:
+        // idstore location is not set
+
+        new FileIDProvider(serviceLocator);
 
 
-        try {
-            idp.configure();
-            assert false
-        }
-        catch (IDStoreNotConfiguredException ex) {
-            assert  ex instanceof IDStoreNotConfiguredException
-        }
+        then:
 
-        when :
-        // idstore location is  empty
-       idp = new FileIDProvider();
-        SystemHelper helper = ServiceLocatorHelper.getServiceLocator().getService(SystemHelper.class);
-        helper.writeProperty(FileIDProvider.IDSTORE_LOC,"")
-
-        then :
+        systemHelper.readConfigurationProperty(FileIDProvider.ID_STORE_LOC) >> null
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
+        thrown(IDStoreNotConfiguredException.class)
 
 
-        try {
-            idp.configure();
-            assert false
-        }
-        catch (IDStoreNotConfiguredException ex) {
-            assert  ex instanceof IDStoreNotConfiguredException
-        }
 
-        when :
+
+
+
+        when:
+
+        new FileIDProvider(serviceLocator);
+
+        then:
+       1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>("")
+       1* serviceLocator.getService(SystemHelper.class) >> systemHelper
+        thrown(IDStoreNotConfiguredException.class)
+
+
+
+        when:
         // idstore location is  junk
-        idp = new FileIDProvider();
-        helper = ServiceLocatorHelper.getServiceLocator().getService(SystemHelper.class);
-        helper.writeProperty(FileIDProvider.IDSTORE_LOC,"llllll")
+
+
+        new FileIDProvider(serviceLocator);
+
 
         then :
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>("junk")
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
+        idEx = thrown()
+        idEx.getCause().class == FileNotFoundException.class
 
 
-        try {
-            idp.configure();
-            assert false
-        }
-        catch (IDStoreNotConfiguredException ex) {
-            assert  ex.getCause() instanceof FileNotFoundException
-        }
 
         when :
         // idstore location is  not a particular format
-        idp = new FileIDProvider();
-        File f = new File("./idstore");
-        f.createNewFile()
+
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(f));
         String jsonStr = "atul-welcome1";
         writer.append(jsonStr);
         writer.close();
-
-        helper = ServiceLocatorHelper.getServiceLocator().getService(SystemHelper.class);
-        helper.writeProperty(FileIDProvider.IDSTORE_LOC,"./idstore")
+        new FileIDProvider(serviceLocator);
 
         then :
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
+        idEx = thrown()
+        idEx.getCause().class == JsonParseException.class
+        f.delete()
 
-            try {
-                idp.configure();
-                assert false
-            }
-        catch (IDStoreNotConfiguredException ex) {
-            assert ex.getCause() instanceof JsonParseException
 
-        }
+
 
         when :
+
+        f = folder.newFile("idstore");
         writer = new BufferedWriter(new FileWriter(f));
         jsonStr = "{ \"users\": \"atul\"}";
         writer.append(jsonStr);
         writer.close();
+        new FileIDProvider(serviceLocator);
 
         then :
-        try {
-            idp.configure();
-        }
-        catch (IDStoreNotConfiguredException idEx) {
-            assert  idEx.getErrorCode().contains(MessageService.IDSTORE_NOT_CONFIGURED)
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
+        idEx = thrown()
+        idEx.getErrorCode() == SecurityMessages.DINDORA_SECURITY_IDSTORE_FORMAT_NOT_VALID.toString()
+        f.delete()
 
 
-        }
 
         when :
+
+        f = folder.newFile("idstore");
         writer = new BufferedWriter(new FileWriter(f));
         jsonStr = "{ \"users\": [{ \"userid\":\"atul\" , \"password\":\"welcome1\" }, " +
           "{ \"userid\":\"ajeet\" , \"password\":\"welcome1\" } ]}";
         writer.append(jsonStr);
         writer.close();
+        new FileIDProvider(serviceLocator);
 
         then :
-        try {
-            idp.configure();
-        }
-        catch (IDStoreNotConfiguredException idEx) {
-            assert  idEx.getCause() instanceof  UnrecognizedPropertyException
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
+        idEx = thrown()
+        idEx.getCause().class == UnrecognizedPropertyException.class
+        f.delete()
 
 
-        }
-        cleanup:
-        f.delete();
 
     }
 
     def "Test Configure  is success if format of json is an array of auth creds "() {
 
         setup:
+        ServiceLocator serviceLocator = Mock(ServiceLocator.class)
+        SystemHelper systemHelper = Mock(SystemHelper.class)
+
+        File   f = folder.newFile("idstore");
 
         when :
-        IDProvider idp = new FileIDProvider();
-        File f = new File("./idstore");
-        f.createNewFile()
+
         BufferedWriter writer = new BufferedWriter(new FileWriter(f));
         String jsonStr = "{ \"users\": [{ \"username\":\"atul\" , \"password\":\"welcome1\" }, " +
                 "{ \"username\":\"ajeet\" , \"password\":\"welcome1\" } ]}";
         writer.append(jsonStr);
         writer.close();
+        new FileIDProvider(serviceLocator);
+
 
         then :
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
 
 
-            idp.configure();
 
 
-        cleanup:
-        f.delete();
+
     }
     def "Test Authenticate method"() {
 
         setup:
+        ServiceLocator serviceLocator = Mock(ServiceLocator.class)
+        SystemHelper systemHelper = Mock(SystemHelper.class)
 
-        when :
-        IDProvider idp = new FileIDProvider();
-        File f = new File("./idstore");
-        f.createNewFile()
+        File   f = folder.newFile("idstore");
+        def result;
         BufferedWriter writer = new BufferedWriter(new FileWriter(f));
         String jsonStr = "{ \"users\": [{ \"username\":\"atul\" , \"password\":\"welcome1\" }, " +
                 "{ \"username\":\"ajeet\" , \"password\":\"welcome\" } ]}";
         writer.append(jsonStr);
         writer.close();
-        idp.configure();
-        then :
-
+        when :
+        IDProvider idp = new FileIDProvider(serviceLocator);
         AuthenticationCredentials authCreds = new UserNamePasswordCredentials("atul1",'welcome1');
-       assert  idp.authenticate(authCreds) == false
+        result =  idp.authenticate(authCreds)
+        then :
+        result == false;
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
 
 
         when :
+        idp = new FileIDProvider(serviceLocator);
         authCreds = new UserNamePasswordCredentials("atul",'welcome');
+        result =  idp.authenticate(authCreds)
         then:
-        assert  idp.authenticate(authCreds) == false
+        result == false;
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
 
 
         when :
+        idp = new FileIDProvider(serviceLocator);
         authCreds = new UserNamePasswordCredentials("ajeet",'welcome1');
+        result =  idp.authenticate(authCreds)
         then:
-        assert  idp.authenticate(authCreds) == false
+        result == false;
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
+
+        when :
+        idp = new FileIDProvider(serviceLocator);
+        authCreds = new UserNamePasswordCredentials("ajeet",'welcome');
+        result =  idp.authenticate(authCreds)
+        then:
+        result == true;
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
+
+        when :
+        idp = new FileIDProvider(serviceLocator);
+        authCreds = new UserNamePasswordCredentials("atul",'welcome1');
+        result =  idp.authenticate(authCreds)
+        then:
+        result == true;
+        1* systemHelper.readConfigurationProperty(_,_) >> new Optional<String>(f.getAbsolutePath())
+        serviceLocator.getService(SystemHelper.class) >> systemHelper
 
 
-        cleanup:
-        f.delete();
 
     }
 

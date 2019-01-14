@@ -1,55 +1,77 @@
 package org.aggregatortech.dindora.security.authentication.interceptor
 
-import org.aggregatortech.dindora.common.ServiceLocatorHelper
-import org.aggregatortech.dindora.common.io.system.SystemHelper;
+
 import org.aggregatortech.dindora.common.test.BaseSpecification
-import org.aggregatortech.dindora.exceptions.InvalidCredentialsException
-import org.aggregatortech.dindora.exceptions.MessageService
-import org.aggregatortech.dindora.security.authentication.providers.FileIDProvider
+import org.aggregatortech.dindora.exception.IDStoreNotConfiguredException
+import org.aggregatortech.dindora.exception.InvalidCredentialsException
+
+import org.aggregatortech.dindora.security.authentication.providers.IDProvider
 import org.aggregatortech.dindora.security.authentication.token.AuthenticationCredentials
 import org.aggregatortech.dindora.security.authentication.token.UserNamePasswordCredentials
+import org.aggregatortech.dindora.security.bundle.SecurityMessages
 
 class AuthenticationInterceptorTest extends BaseSpecification{
 
 
+
+    def "Test initialization fails if configure method throws Exception"() {
+
+        setup:
+        IDProvider idp = null
+
+
+        when:
+
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(idp)
+
+        then:
+            idp.configure(serviceLocator) >> { throw new IDStoreNotConfiguredException(SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString()) }
+            RuntimeException ex = thrown()
+            ex.getMessage() == SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString()
+
+
+
+
+    }
+
     def "Test intercept request and fail for the lack of/invalid credentials"() {
 
         setup:
-        SystemHelper helper = ServiceLocatorHelper.getServiceLocator().getService(SystemHelper.class);
-        helper.writeProperty(FileIDProvider.IDSTORE_LOC,"./idstore")
-        File f = new File("./idstore");
-        f.createNewFile()
-        BufferedWriter writer = new BufferedWriter(new FileWriter(f));
-        String jsonStr = "{ \"users\": [{ \"username\":\"atul\" , \"password\":\"welcome1\" }, " +
-                "{ \"username\":\"ajeet\" , \"password\":\"welcome1\" } ]}";
-        writer.append(jsonStr);
-        writer.close();
+        IDProvider idp = Mock(IDProvider.class)
+        String password = "welcome2";
+        String username = "atul";
+
+        AuthenticationCredentials creds = new UserNamePasswordCredentials(username,password);
+        AuthenticationInterceptor interceptor = new AuthenticationInterceptor(idp);
+
         MessageContext msgCtx =  new MessageContext();
-        AuthenticationInterceptor interceptor = new AuthenticationInterceptor();
+
         when :
-            AuthenticationCredentials creds = null;
-            msgCtx.setAuthCreds(creds);
+
+            msgCtx.setAuthCreds(null);
+
 
         then:
         try {
-            boolean isSuccess = interceptor.intercept(msgCtx);
+              interceptor.intercept(msgCtx);
             assert false;
         }
         catch(InvalidCredentialsException ex) {
-            assert ex.getErrorCode() == MessageService.USERNAME_NULL_EMPTY;
+            assert ex.getErrorCode() == SecurityMessages.DINDORA_SECURITY_USERNAME_NULL_EMPTY.toString();
         }
 
+
+
+        msgCtx.setAuthCreds(creds);
+        def intercept
         when :
 
-            String password = "welcome2";
-            String username = "atul";
-            creds = new UserNamePasswordCredentials(username,password);
-            msgCtx.setAuthCreds(creds);
-            then:
-                assert interceptor.intercept(msgCtx) == false;
+        intercept = interceptor.intercept(msgCtx)
 
-        cleanup:
-        f.delete();
+        then:
+            idp.authenticate(creds) >> false
+
+
 
 
 
@@ -57,43 +79,27 @@ class AuthenticationInterceptorTest extends BaseSpecification{
 
     def "Test intercept request and pass with valid credentials"() {
         setup:
-        SystemHelper helper = ServiceLocatorHelper.getServiceLocator().getService(SystemHelper.class);
-        helper.writeProperty(FileIDProvider.IDSTORE_LOC,"./idstore")
-        File f = new File("./idstore");
-        f.createNewFile()
-        BufferedWriter writer = new BufferedWriter(new FileWriter(f));
-        String jsonStr = "{ \"users\": [{ \"username\":\"atul\" , \"password\":\"welcome1\" }, " +
-                "{ \"username\":\"ajeet\" , \"password\":\"welcome1\" } ]}";
-        writer.append(jsonStr);
-        writer.close();
+        IDProvider idp = Mock(IDProvider.class)
+        AuthenticationInterceptor interceptor = new AuthenticationInterceptor(idp);
+
         MessageContext msgCtx =  new MessageContext();
-        AuthenticationInterceptor interceptor = new AuthenticationInterceptor();
+
         AuthenticationCredentials creds = null;
-        when :
         String password = "welcome1";
         String username = "atul";
         creds = new UserNamePasswordCredentials(username,password);
+        def intercept
+        when :
         msgCtx.setAuthCreds(creds);
-
-        msgCtx.setAuthCreds(creds);
+        intercept = interceptor.intercept(msgCtx)
 
         then:
-
-           assert interceptor.intercept(msgCtx) == true;
-
-        when :
-        password = "welcome1";
-        username = "ajeet";
-        creds = new UserNamePasswordCredentials(username,password);
-        msgCtx.setAuthCreds(creds);
-
-        msgCtx.setAuthCreds(creds);
-        then :
-        assert interceptor.intercept(msgCtx) == true;
+        1* idp.authenticate(creds) >> true
+        assert intercept;
 
 
-        cleanup:
-                f.delete();
+
+
 
     }
 

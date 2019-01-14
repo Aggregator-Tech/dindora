@@ -4,3 +4,6 @@ testSets {
         systemProperties(System.properties)
     }
 }
+dependencies {
+    integrationTestImplementation ( project(':common').sourceSets.test.output)
+}

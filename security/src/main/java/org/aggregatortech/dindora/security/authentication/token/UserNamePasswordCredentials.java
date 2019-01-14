@@ -1,7 +1,10 @@
 package org.aggregatortech.dindora.security.authentication.token;
 
-import org.aggregatortech.dindora.exceptions.MessageService;
-import org.aggregatortech.dindora.exceptions.InvalidCredentialsException;
+import org.aggregatortech.dindora.exception.InvalidCredentialsException;
+
+import org.aggregatortech.dindora.security.bundle.SecurityMessages;
+
+import java.util.Objects;
 
 public class UserNamePasswordCredentials  implements AuthenticationCredentials {
 
@@ -26,23 +29,28 @@ public class UserNamePasswordCredentials  implements AuthenticationCredentials {
     }
 
     @Override
-    public boolean equals(AuthenticationCredentials authenticationCredentials) {
-        UserNamePasswordCredentials upc = (UserNamePasswordCredentials)authenticationCredentials;
-
-        if (this.username.equals(upc.getUsername()) && this.password.equals(upc.getPassword())) {
-            return true;
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserNamePasswordCredentials that = (UserNamePasswordCredentials) o;
+        return Objects.equals(username, that.username) &&
+                Objects.equals(password, that.password);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password);
+    }
+
+
+
     public boolean validateUser() throws InvalidCredentialsException {
-        if ( username == null )
-        {
-            throw new InvalidCredentialsException(MessageService.USERNAME_NULL_EMPTY);
+        if ( username == null ) {
+            throw new InvalidCredentialsException(SecurityMessages.DINDORA_SECURITY_USERNAME_NULL_EMPTY.toString());
         }
         if ( username.isEmpty() )
         {
-            throw new InvalidCredentialsException(MessageService.USERNAME_NULL_EMPTY);
+            throw new InvalidCredentialsException(SecurityMessages.DINDORA_SECURITY_USERNAME_NULL_EMPTY.toString());
         }
 
         return true;
@@ -61,11 +69,11 @@ public class UserNamePasswordCredentials  implements AuthenticationCredentials {
     public boolean validatePassword() throws InvalidCredentialsException {
         if ( password == null )
         {
-            throw new InvalidCredentialsException(MessageService.PASSWORD_NULL_EMPTY);
+            throw new InvalidCredentialsException(SecurityMessages.DINDORA_SECURITY_PASSWORD_NULL_EMPTY.toString());
         }
         if ( password.isEmpty() )
         {
-            throw new InvalidCredentialsException(MessageService.PASSWORD_NULL_EMPTY);
+            throw new InvalidCredentialsException(SecurityMessages.DINDORA_SECURITY_PASSWORD_NULL_EMPTY.toString());
         }
 
         return true;
