@@ -15,7 +15,11 @@ public abstract class BaseException extends RuntimeException {
     this.errorMessage = messageService.getMessage(this.getErrorCode());
 
   }
-
+  /**
+   * Constructor that wraps the exception passed as an argument
+   * @param errCode Error code
+   * @param ex) Exception
+   */
   public BaseException(String errCode, Exception ex) {
     super(errCode,ex);
     this.errorCode = errCode;

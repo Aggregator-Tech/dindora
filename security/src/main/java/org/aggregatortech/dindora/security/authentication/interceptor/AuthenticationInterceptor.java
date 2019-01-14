@@ -28,7 +28,10 @@ public class AuthenticationInterceptor {
 
     }
 
-
+    /**
+     * Intercepts and uses messagecontext to extract information required for authentication
+     * @param msgCtx MessageContext
+     */
     public boolean intercept(MessageContext msgCtx) throws  InvalidCredentialsException {
 
 

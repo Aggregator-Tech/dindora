@@ -92,6 +92,13 @@ public class SystemHelper {
 
     System.setProperty(propName, value);
   }
+  /**
+   * Read the value of configuration property with the following precedence:
+   * 1. Environment variable.
+   * 2. Java system property.
+   *
+   * @param configProperty The configuration property
+   */
 
   public String getConfigPropertyAsString(ConfigProperty configProperty) {
     return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, configProperty.toString());
