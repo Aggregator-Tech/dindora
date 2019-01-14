@@ -1,5 +1,6 @@
 package org.aggregatortech.dindora.common.test
 
+import org.aggregatortech.dindora.common.ServiceLocatorHelper
 import org.glassfish.hk2.api.ServiceLocator
 
 
@@ -11,6 +12,6 @@ class BaseSpecification extends Specification{
 
     def setupSpec() {
         println "setup BaseSpecification";
-        serviceLocator = org.aggregatortech.dindora.common.ServiceLocatorHelper.serviceLocator;
+        serviceLocator = ServiceLocatorHelper.serviceLocator;
     }
 }

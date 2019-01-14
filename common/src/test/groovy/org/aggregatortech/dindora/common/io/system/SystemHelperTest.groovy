@@ -1,6 +1,6 @@
 package org.aggregatortech.dindora.common.io.system
 
-
+import org.aggregatortech.dindora.common.CommonConfigProperty
 import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities
 import org.glassfish.hk2.utilities.binding.AbstractBinder
@@ -20,7 +20,7 @@ class SystemHelperTest extends Specification {
         });
         SystemHelper systemHelper = serviceLocator.getService(SystemHelper.class);
         when:
-        Optional<String> property = systemHelper.readConfigurationProperty(org.aggregatortech.dindora.common.CommonConfigProperty.SERVICE_DESCRIPTION)
+        Optional<String> property = systemHelper.readConfigurationProperty(CommonConfigProperty.SERVICE_DESCRIPTION)
 
         then:
         !property.isPresent()

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aggregatortech.dindora.common.io.system.SystemHelper;
 import org.aggregatortech.dindora.exception.IDStoreNotConfiguredException;
+import org.aggregatortech.dindora.security.SecurityConfigProperty;
 import org.aggregatortech.dindora.security.authentication.token.AuthenticationCredentials;
 import org.aggregatortech.dindora.security.authentication.token.UserNamePasswordCredentials;
 import org.aggregatortech.dindora.security.bundle.SecurityMessages;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class FileIDProvider implements IDProvider {
 
 
-    public static final String ID_STORE_LOC = "id-store.loc";
+
 
 
     private AuthenticationCredentials[] credentials;
@@ -38,7 +39,7 @@ public class FileIDProvider implements IDProvider {
         //File fileLoc = null;
 
         SystemHelper systemHelper = serviceLocator.getService(SystemHelper.class);
-        Optional<String> propertyValue = systemHelper.readConfigurationProperty(ID_STORE_LOC,null);
+        Optional<String> propertyValue = systemHelper.readConfigurationProperty(SecurityConfigProperty.ID_STORE_LOC,null);
 
 
         if (propertyValue == null || !propertyValue.isPresent() || propertyValue.get().trim().isEmpty()) {

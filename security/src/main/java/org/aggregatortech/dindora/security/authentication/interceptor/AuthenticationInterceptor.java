@@ -2,6 +2,7 @@ package org.aggregatortech.dindora.security.authentication.interceptor;
 
 
 import org.aggregatortech.dindora.exception.InvalidCredentialsException;
+import org.aggregatortech.dindora.exception.ProcessingException;
 import org.aggregatortech.dindora.security.authentication.providers.IDProvider;
 import org.aggregatortech.dindora.security.authentication.token.AuthenticationCredentials;
 import org.aggregatortech.dindora.security.bundle.SecurityMessages;
@@ -21,7 +22,7 @@ public class AuthenticationInterceptor {
     @Inject
     public AuthenticationInterceptor(IDProvider idp)  {
         if (idp == null ) {
-            throw new RuntimeException(SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString());
+            throw new ProcessingException(SecurityMessages.DINDORA_SECURITY_IDSTORE_NOT_CONFIGURED.toString());
         }
         this.idp = idp;
 

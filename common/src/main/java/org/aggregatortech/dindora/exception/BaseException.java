@@ -20,6 +20,9 @@ public abstract class BaseException extends RuntimeException {
     super(errCode,ex);
     this.errorCode = errCode;
     MessageService messageService = ServiceLocatorHelper.getServiceLocator().getService(MessageService.class);
+    if (messageService == null ) {
+      return;
+    }
     this.errorMessage = messageService.getMessage(this.getErrorCode());
 
   }
