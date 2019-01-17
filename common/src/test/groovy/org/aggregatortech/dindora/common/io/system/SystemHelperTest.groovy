@@ -1,9 +1,11 @@
 package org.aggregatortech.dindora.common.io.system
 
+import org.aggregatortech.dindora.common.CommonConfigProperty
 import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities
 import org.glassfish.hk2.utilities.binding.AbstractBinder
-import org.aggregatortech.dindora.common.CommonConfigProperty
+
+
 import spock.lang.Specification
 
 class SystemHelperTest extends Specification {
@@ -23,4 +25,6 @@ class SystemHelperTest extends Specification {
         then:
         !property.isPresent()
     }
+
+
 }

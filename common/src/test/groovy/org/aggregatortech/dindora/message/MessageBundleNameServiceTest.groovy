@@ -24,4 +24,15 @@ class MessageBundleNameServiceTest extends Specification{
         then:
         messageBundleName == null
     }
+
+    def "Test get message bundle name with null error code"() {
+        setup:
+        MessageBundleNameService messageBundleNameService = new MessageBundleNameService()
+
+        when:
+        String messageBundleName = messageBundleNameService.getMessageBundleName(null)
+
+        then:
+        messageBundleName == null
+    }
 }

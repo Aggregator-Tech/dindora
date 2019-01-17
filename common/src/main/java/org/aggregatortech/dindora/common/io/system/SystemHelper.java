@@ -50,6 +50,17 @@ public class SystemHelper {
   public Optional<String> readConfigurationProperty(ConfigProperty configProperty,
                                                     String defaultValue) {
     String propertyName = getConfigPropertyAsString(configProperty);
+    return readConfigurationProperty(propertyName,defaultValue);
+  }
+  /**
+   * Read the value of configuration property with the following precedence:
+   * 1. Environment variable.
+   * 2. Java system property.
+   *
+   * @param propertyName The configuration property name as String
+   * @param defaultValue The default value if configuration property not specified.
+   */
+  public Optional<String> readConfigurationProperty(String propertyName, String defaultValue) {
     String propertyValue;
     propertyValue = System.getenv(propertyName);
     if (propertyValue == null) {
@@ -68,11 +79,31 @@ public class SystemHelper {
    */
   public void writeConfigurationProperty(ConfigProperty configProperty,
                                     String value) {
-    System.setProperty(getConfigPropertyAsString(configProperty), value);
+
+   writeProperty(getConfigPropertyAsString(configProperty), value);
   }
+
+  /**
+   * Write the value of a configuration property.
+   * @param propName The configuration property.
+   * @param value The value.
+   */
+  public void writeProperty( String propName, String value) {
+
+    System.setProperty(propName, value);
+  }
+  /**
+   * Read the value of configuration property with the following precedence:
+   * 1. Environment variable.
+   * 2. Java system property.
+   *
+   * @param configProperty The configuration property
+   */
 
   public String getConfigPropertyAsString(ConfigProperty configProperty) {
     return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, configProperty.toString());
   }
+
+
 
 }

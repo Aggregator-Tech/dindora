@@ -4,7 +4,9 @@ dependencies {
     implementation (
             ['org.glassfish.hk2:hk2:2.5.0-b36'],
             ['org.glassfish.hk2:hk2-metadata-generator:2.5.0-b36'],
-            ['com.google.guava:guava:23.0']
+            ['com.google.guava:guava:23.0'],
+            ['com.fasterxml.jackson.core:jackson-core:2.9.8'],
+            ['com.fasterxml.jackson.core:jackson-databind:2.9.8']
     )
     testImplementation (
             ['org.spockframework:spock-core:1.1-groovy-2.4-rc-2'],
