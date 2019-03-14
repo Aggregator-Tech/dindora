@@ -47,9 +47,16 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
       synchronized (this) {
         if (dynamoDb == null) {
           selfCheck();
-          Regions region = Regions.fromName(awsRegionService.getRegion());
+          String regionName = awsRegionService.getRegion();
+
           AmazonDynamoDB client;
-          client = AmazonDynamoDBClientBuilder.standard().withRegion(region).build();
+          AmazonDynamoDBClientBuilder clientBuilder = AmazonDynamoDBClientBuilder.standard();
+
+          if(regionName != null) {
+            Regions region = Regions.fromName(regionName);
+            clientBuilder = clientBuilder.withRegion(region);
+          }
+          client = clientBuilder.build();
           dynamoDb = new DynamoDB(client);
         }
       }

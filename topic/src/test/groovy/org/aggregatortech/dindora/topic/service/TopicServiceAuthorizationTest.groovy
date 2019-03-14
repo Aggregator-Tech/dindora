@@ -10,9 +10,6 @@ class TopicServiceAuthorizationTest extends BaseSpecification {
 
     def "Test Topic Service Authorization"() {
         TopicService topicService = getServiceLocator().getService(TopicService.class);
-        TopicPersistenceService mockPersistenceService = Mock()
-        Topic mockTopic = Mock()
-        topicService.setPersistenceService(mockPersistenceService)
 
         when:
         topicService.getTopic("unauthorized-id")
@@ -21,13 +18,6 @@ class TopicServiceAuthorizationTest extends BaseSpecification {
         Exception e= thrown()
         println "e = $e"
 
-        when:
-        Topic queryTopic;
-        queryTopic = topicService.getTopic("authorized-id")
-
-        then:
-        1 * mockPersistenceService.get("authorized-id") >> mockTopic
-        queryTopic == mockTopic
 
 
     }

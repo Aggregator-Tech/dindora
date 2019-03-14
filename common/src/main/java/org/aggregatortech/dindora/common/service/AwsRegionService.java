@@ -1,23 +1,22 @@
 package org.aggregatortech.dindora.common.service;
 
+import org.aggregatortech.dindora.common.ConfigProperty;
+import org.aggregatortech.dindora.common.io.system.SystemHelper;
 import org.jvnet.hk2.annotations.Service;
+
+import javax.inject.Inject;
 
 @Service
 public class AwsRegionService {
-  enum AwsRegions {
-    US_WEST_2("us-west-2");
 
-    private String id;
-    AwsRegions(String id) {
-      this.id = id;
-    }
-
-    public String getId() {
-      return id;
-    }
+  enum AwsRegionConfigProperty implements ConfigProperty {
+    AWS_REGION;
   }
 
+  @Inject
+  SystemHelper systemHelper;
+
   public String getRegion() {
-    return AwsRegions.US_WEST_2.getId();
+    return systemHelper.readConfigurationProperty(AwsRegionConfigProperty.AWS_REGION).get();
   }
 }
