@@ -3,6 +3,7 @@ package org.aggregatortech.dindora.topic.persistence
 import org.aggregatortech.dindora.common.test.BaseSpecification
 import org.aggregatortech.dindora.exception.ProcessingException
 import org.aggregatortech.dindora.persistence.file.FilePersistenceLocationService
+import org.aggregatortech.dindora.persistence.message.bundle.PersistenceMessages
 import org.aggregatortech.dindora.topic.object.Topic
 import org.glassfish.hk2.api.ServiceLocator
 import org.junit.Rule
@@ -38,7 +39,7 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         retTopic1.id != null
 
         when: "All topics are queried"
-        List<Topic> topics = topicFilePersistenceService.search()
+        List<Topic> topics = topicFilePersistenceService.getAll()
 
         then: "Recently created topic is returned"
         topics != null
@@ -58,12 +59,20 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
         retTopic2.id != null
 
         when: "All topics are queried"
-        topics = topicFilePersistenceService.search()
+        topics = topicFilePersistenceService.getAll()
 
         then: "Both the topics are returned"
         topics != null
         topics.size() == 2
         topics.containsAll(retTopic1, retTopic2)
+
+        when: "A particular topics are queried"
+        Topic queryTopic;
+        queryTopic = topicFilePersistenceService.get(retTopic2.id)
+
+        then: "It is returned"
+        queryTopic != null
+        queryTopic == retTopic2
 
     }
 
@@ -83,14 +92,14 @@ class TopicFilePersistenceServiceTest extends BaseSpecification {
 
         then:
         ProcessingException pe = thrown()
-        pe.errorMessage.contains("Communication failure with Persistence service.")
+        pe.errorCode == PersistenceMessages.DINDORA_PERSISTENCE_NOT_CONFIGURED.toString()
 
         when:
         newFile.delete()
-        topicFilePersistenceService.search()
+        topicFilePersistenceService.getAll()
 
         then:
         pe = thrown()
-        pe.errorMessage.contains("Communication failure with Persistence service.")
+        pe.errorCode == PersistenceMessages.DINDORA_PERSISTENCE_NOT_CONFIGURED.toString()
     }
 }

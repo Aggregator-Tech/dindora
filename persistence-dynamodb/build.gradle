@@ -1,0 +1,9 @@
+dependencies {
+    compile (
+            project(':persistence-api'),
+            group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.1',
+            'com.amazonaws:aws-java-sdk-dynamodb:1.11.477'
+    )
+
+}
+

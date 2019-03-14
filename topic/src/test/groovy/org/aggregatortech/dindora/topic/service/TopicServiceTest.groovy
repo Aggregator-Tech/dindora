@@ -3,10 +3,9 @@ package org.aggregatortech.dindora.topic.service
 import org.aggregatortech.dindora.message.bundle.CommonMessages
 import org.aggregatortech.dindora.topic.message.bundle.TopicMessages
 import org.aggregatortech.dindora.topic.object.Topic
-import org.aggregatortech.dindora.persistence.PersistenceService
 import org.aggregatortech.dindora.common.test.BaseSpecification
 import org.aggregatortech.dindora.exception.ProcessingException
-import org.aggregatortech.dindora.topic.persistence.TopicFilePersistenceService
+import org.aggregatortech.dindora.topic.persistence.TopicPersistenceService
 
 import java.util.stream.Collectors
 import java.util.stream.Stream
@@ -15,7 +14,7 @@ class TopicServiceTest extends BaseSpecification{
 
     def "Test get all topics"() {
         setup:
-        PersistenceService persistenceService = Mock()
+        TopicPersistenceService persistenceService = Mock()
         Topic mockTopic = Mock()
         List<Topic> mockTopics = Stream.of(mockTopic).collect(Collectors.toList())
         TopicService topicService
@@ -26,7 +25,7 @@ class TopicServiceTest extends BaseSpecification{
         List<Topic> topics = topicService.getAllTopics()
 
         then:
-        persistenceService.search() >> mockTopics
+        persistenceService.getAll() >> mockTopics
         topics != null
         topics.size() == 1
 
@@ -34,7 +33,7 @@ class TopicServiceTest extends BaseSpecification{
         topics = topicService.getAllTopics()
 
         then:
-        persistenceService.search() >> Collections.EMPTY_LIST
+        persistenceService.getAll() >> Collections.EMPTY_LIST
         topics != null
         topics.size() == 0
 
@@ -42,7 +41,7 @@ class TopicServiceTest extends BaseSpecification{
         topicService.getAllTopics()
 
         then:
-        persistenceService.search() >> {throw new ProcessingException(CommonMessages.DINDORA_COMMON_PROCESSING_FAILED.toString())}
+        persistenceService.getAll() >> {throw new ProcessingException(CommonMessages.DINDORA_COMMON_PROCESSING_FAILED.toString())}
         ProcessingException re= thrown()
         re.errorCode == CommonMessages.DINDORA_COMMON_PROCESSING_FAILED.toString()
 
@@ -62,7 +61,7 @@ class TopicServiceTest extends BaseSpecification{
 
     def "Test create Topic"() {
         setup:
-        PersistenceService mockPersistenceService = Mock()
+        TopicPersistenceService mockPersistenceService = Mock()
         TopicService topicService
         topicService = new TopicService()
         topicService.setPersistenceService(mockPersistenceService)
@@ -82,18 +81,5 @@ class TopicServiceTest extends BaseSpecification{
         1 * mockPersistenceService.create(mockNewTopic) >> mockRetTopic
         retTopic != null
         retTopic.id != null
-    }
-
-    def "Test Default Persistence Service is File"() {
-        setup:
-        TopicService topicService = getServiceLocator().getService(TopicService.class)
-
-        PersistenceService<Topic> persistenceService
-        when:
-        persistenceService = topicService.getPersistenceService()
-
-        then:
-        persistenceService instanceof TopicFilePersistenceService
-
     }
 }

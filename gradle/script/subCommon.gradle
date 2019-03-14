@@ -3,6 +3,7 @@ apply from: "$rootProject.projectDir/gradle/script/properties.gradle"
 dependencies {
     implementation (
             ['org.glassfish.hk2:hk2:2.5.0-b36'],
+            ['org.glassfish.hk2:hk2-extras:2.5.0-b36'],
             ['org.glassfish.hk2:hk2-metadata-generator:2.5.0-b36'],
             ['com.google.guava:guava:23.0'],
             ['com.fasterxml.jackson.core:jackson-core:2.9.8'],

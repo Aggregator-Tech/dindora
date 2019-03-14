@@ -10,10 +10,11 @@ import org.jvnet.hk2.annotations.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service(name = PersistenceTypeService.PERSISTENCE_TYPE_FILE)
-public class TopicFilePersistenceService extends FilePersistenceService<Topic> {
-
+public class TopicFilePersistenceService extends FilePersistenceService<Topic>
+    implements TopicPersistenceService {
 
   @Override
   protected List<Topic> readData() {
@@ -40,4 +41,5 @@ public class TopicFilePersistenceService extends FilePersistenceService<Topic> {
   private ProcessingException buildException() {
     return getExceptionService().buildException(new ProcessingException(TopicMessages.DINDORA_TOPIC_PERSISTENCE_FAILED.toString()));
   }
+
 }

@@ -9,6 +9,9 @@ allprojects {
     }
 
 
+    tasks.withType(Test) {
+        systemProperties(System.properties)
+    }
 }
 
 subprojects {
@@ -25,5 +28,4 @@ subprojects {
     version '1.0'
 
 }
-
 

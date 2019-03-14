@@ -8,10 +8,13 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 class BaseSpecification extends Specification{
-    @Shared ServiceLocator serviceLocator;
+    @Shared static ServiceLocator serviceLocator;
+
+    static {
+        serviceLocator = ServiceLocatorHelper.serviceLocator;
+    }
 
     def setupSpec() {
         println "setup BaseSpecification";
-        serviceLocator = ServiceLocatorHelper.serviceLocator;
     }
 }

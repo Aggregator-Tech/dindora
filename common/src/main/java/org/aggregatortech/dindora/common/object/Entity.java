@@ -1,14 +1,23 @@
 package org.aggregatortech.dindora.common.object;
 
-public class Entity {
-  protected String id;
+import java.util.Map;
+
+public abstract class Entity {
+
+  public static enum AttributeNames {
+    id;
+  }
+  protected Map<String,String> attributes;
 
   public String getId() {
-    return id;
+    return attributes.get(AttributeNames.id.toString());
   }
 
   public void setId(String id) {
-    this.id = id;
+    attributes.put(AttributeNames.id.toString(), id);
   }
 
+  public Map<String, String> getAttributes() {
+    return attributes;
+  }
 }
