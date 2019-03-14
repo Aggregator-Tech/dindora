@@ -10,6 +10,10 @@ public class MessageBundleNameService {
 
   public String getMessageBundleName(String messageCode) {
     String messageBundleName = null;
+
+    if (messageCode == null ) {
+      return null;
+    }
     Pattern pattern = Pattern.compile("([A-Z]+_[A-Z]+)(_\\w+)");
     Matcher matcher = pattern.matcher(messageCode);
     if (matcher.matches()) {
