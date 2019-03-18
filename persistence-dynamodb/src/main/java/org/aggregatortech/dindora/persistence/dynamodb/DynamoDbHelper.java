@@ -6,7 +6,6 @@ import org.jvnet.hk2.annotations.Service;
 @Service
 public class DynamoDbHelper {
   public boolean checkConfiguration() {
-    return !Strings.isNullOrEmpty(System.getProperty("aws.accessKeyId"))
-        && !Strings.isNullOrEmpty(System.getProperty("aws.secretKey"));
+    return true;
   }
 }

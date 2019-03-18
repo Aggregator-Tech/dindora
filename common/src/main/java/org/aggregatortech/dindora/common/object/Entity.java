@@ -17,7 +17,7 @@ public abstract class Entity {
     attributes.put(AttributeNames.id.toString(), id);
   }
 
-  public Map<String, String> getAttributes() {
+  public Map<String, String> allAttributes() {
     return attributes;
   }
 }

@@ -85,7 +85,7 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
     while (iter.hasNext()) {
       T entity = createEntityInstance();
       Item item = iter.next();
-      item.attributes().forEach(entry -> entity.getAttributes().put(entry.getKey(), entry.getValue().toString()));
+      item.attributes().forEach(entry -> entity.allAttributes().put(entry.getKey(), entry.getValue().toString()));
       entities.add(entity);
     }
     return entities;
@@ -107,9 +107,9 @@ public abstract class DynamoDbPersistenceService<T extends Entity>
 
   protected Item mapEntityToItem(T entity) {
     Item item = new Item();
-    Set<String> attributes = entity.getAttributes().keySet();
+    Set<String> attributes = entity.allAttributes().keySet();
     for (String attribute : attributes) {
-      item = item.withString(attribute, entity.getAttributes().get(attribute));
+      item = item.withString(attribute, entity.allAttributes().get(attribute));
     }
     return item;
   }

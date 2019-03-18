@@ -17,6 +17,6 @@ public class AwsRegionService {
   SystemHelper systemHelper;
 
   public String getRegion() {
-    return systemHelper.readConfigurationProperty(AwsRegionConfigProperty.AWS_REGION).get();
+    return systemHelper.readConfigurationProperty(AwsRegionConfigProperty.AWS_REGION).orElse(null);
   }
 }
