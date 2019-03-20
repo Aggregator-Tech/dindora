@@ -6,13 +6,15 @@ import org.aggregatortech.dindora.log.LogService;
 import org.aggregatortech.dindora.serverless.lambda.LambdaLogService;
 import org.aggregatortech.dindora.topic.service.TopicService;
 
+import javax.inject.Inject;
+
 public abstract class BaseTopic {
 
   public TopicService getTopicService() {
 
-    if( null == topicService ) {
-      topicService = ServiceLocatorHelper.getServiceLocator().getService(TopicService.class);
-    }
+//    if( null == topicService ) {
+//      topicService = ServiceLocatorHelper.getServiceLocator().getService(TopicService.class);
+//    }
     return topicService;
   }
 
@@ -20,19 +22,22 @@ public abstract class BaseTopic {
     this.topicService = topicService;
   }
 
+  @Inject
   TopicService topicService;
 
   public LogService getLogService() {
-    if( null == logService ) {
-      logService = ServiceLocatorHelper.getServiceLocator().getService(LogService.class);
-    }return logService;
+//    if( null == logService ) {
+//      logService = ServiceLocatorHelper.getServiceLocator().getService(LogService.class);
+//    }
+    return logService;
   }
 
+  @Inject
   LogService logService;
 
-  protected void initializeContext(Context context) {
-    if(getLogService() instanceof LambdaLogService) {
-      ((LambdaLogService)getLogService()).setLambdaLogger(context.getLogger());
-    }
-  }
+//  protected void initializeContext(Context context) {
+//    if(getLogService() instanceof LambdaLogService) {
+//      ((LambdaLogService)getLogService()).setLambdaLogger(context.getLogger());
+//    }
+//  }
 }
